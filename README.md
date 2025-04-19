@@ -4,7 +4,7 @@
 [![Actions Status](https://github.com/SergDanilov/php-project-57/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/SergDanilov/php-project-57/actions)
 
 <p><b>“Task manager”</b> is an app that helps you manage your time and be more efficient </p>
-<p>You can <b>test this app online</b> <a href="https://php-project-57-5grp.onrender.com/">here</a>.</p>
+<p>You can <b>test this app online</b> <a href="https://php-project-57-5grp.onrender.com/" target="_blank">here</a>.</p>
 
 ## Prerequisites
 
