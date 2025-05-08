@@ -12,9 +12,7 @@ class StatusController extends Controller
      */
     public function index()
     {
-        // $statuses = Status::all();
-        // return view('statuses.index', compact('statuses'));
-        $statuses = Status::take(10)->get(); // Ограничить выборку
+        $statuses = Status::all();
         return view('statuses.index', compact('statuses'));
     }
 

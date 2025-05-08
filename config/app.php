@@ -125,6 +125,7 @@ return [
 
     'aliases' => [
         'Html' => Spatie\Html\Facades\Html::class,
+        'Auth' => Illuminate\Support\Facades\Auth::class,
     ],
 
 ];
