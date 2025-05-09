@@ -4,20 +4,25 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Route;
 
+// Главная страница
 Route::get('/', function () {
     return view('welcome');
+})->name('welcome');
+
+// Общие маршруты (доступны всем)
+Route::controller(StatusController::class)->group(function () {
+    Route::get('/task_statuses', 'index')->name('task_statuses.index');
+    Route::get('/task_statuses/{status}', 'show')->name('task_statuses.show');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Защищенные маршруты (только для авторизованных)
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-// Доступно всем
-Route::get('/task_statuses', [StatusController::class, 'index'])
-    ->name('task_statuses.index');
-
-// Только для авторизованных
-Route::middleware('auth')->group(function () {
+    // Status CRUD (кроме index и show)
     Route::resource('task_statuses', StatusController::class)
         ->except(['index', 'show'])
         ->names([
@@ -27,13 +32,8 @@ Route::middleware('auth')->group(function () {
             'update' => 'task_statuses.update',
             'destroy' => 'task_statuses.destroy',
         ]);
-});
 
-Route::middleware('auth')->group(function () {
-    Route::resource('task_statuses', StatusController::class);
-});
-
-Route::middleware('auth')->group(function () {
+    // Профиль
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

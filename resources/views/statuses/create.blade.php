@@ -12,13 +12,15 @@
                     <form action="{{ route('task_statuses.store') }}" method="POST">
                         @csrf
 
-                        <div class="form-group mb-4">
-                            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
-                            <input type="text" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                   id="name" name="name" required>
-                            @error('name')
-                                <div class="text-danger text-red-500 text-xs italic">{{ $message }}</div>
-                            @enderror
+                        <div class="mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                            <div class="w-full">
+                                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+                                <input type="text" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="name" name="name" required>
+                                @error('name')
+                                    <div class="text-danger text-red-500 text-xs italic">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="flex items-center justify-between">

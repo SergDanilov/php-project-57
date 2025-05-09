@@ -13,19 +13,29 @@
                         @csrf
                         @method('PUT')
 
-                        <div class="mb-4">
-                            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
-                            <input type="text"
-                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                   id="name"
-                                   name="name"
-                                   value="{{ old('name', $task_status->name) }}"
-                                   required>
-                            @error('name')
-                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
+                        <div class="mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                            <div class="w-full">
+                                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+                                <input type="text"
+                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="name"
+                                    name="name"
+                                    value="{{ old('name', $task_status->name) }}"
+                                    required>
+                                @error('name')
+                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
 
+                            @if(isset($task_status->created_at))
+                            <div class="w-full sm:w-auto">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Created at:</label>
+                                <div class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-gray-50">
+                                    {{ $task_status->created_at->format('d.m.Y') }}
+                                </div>
+                            </div>
+                            @endif
+                        </div>
                         <div class="flex items-center justify-between">
                             <button type="submit"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">

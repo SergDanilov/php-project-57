@@ -12,7 +12,10 @@ class StatusController extends Controller
      */
     public function index()
     {
-        $statuses = Status::all();
+        $statuses = Status::select('id', 'name', 'created_at')
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
+                    // ->get();
         return view('statuses.index', compact('statuses'));
     }
 
