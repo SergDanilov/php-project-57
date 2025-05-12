@@ -15,6 +15,14 @@ return Application::configure(basePath: dirname(__DIR__))
         // $middleware->validateCsrfTokens(except: [
         //     '/login',
         // ]);
+        $middleware->web([
+            // \App\Http\Middleware\EncryptCookies::class,
+            \App\Http\Middleware\SetLocale::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

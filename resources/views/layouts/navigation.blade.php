@@ -21,11 +21,11 @@
                 <div class="hidden sm:flex sm:items-center sm:ms-10">
                     @auth
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Менеджер задач') }}
+                            {{ __('messages.main__link') }}
                         </x-nav-link>
                     @else
                         <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
-                            {{ __('Менеджер задач') }}
+                            {{ __('messages.main__link') }}
                         </x-nav-link>
                     @endauth
                 </div>
@@ -35,19 +35,20 @@
             <div class="hidden  sm:flex sm:items-center sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2 ">
                 <div class="flex space-x-8 items-center align-items-center h-16">
                     <x-nav-link :href="url('/tasks')" :active="request()->is('tasks')">
-                        {{ __('Задачи') }}
+                        {{ __('messages.tasks__link') }}
                     </x-nav-link>
                     <x-nav-link :href="route('task_statuses.index')" :active="request()->routeIs('task_statuses.index')">
-                        {{ __('Статусы') }}
+                        {{ __('messages.statuses__link') }}
                     </x-nav-link>
                     <x-nav-link :href="url('/labels')" :active="request()->is('labels')">
-                        {{ __('Метки') }}
+                        {{ __('messages.tags__link') }}
                     </x-nav-link>
                 </div>
             </div>
 
             <!-- Settings Dropdown (right side) -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+
                 @auth
                     <!-- Для авторизованных пользователей - выпадающее меню -->
                     <x-dropdown align="right" width="48">
@@ -76,18 +77,62 @@
                             </form>
                         </x-slot>
                     </x-dropdown>
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
+                                {{ strtoupper(app()->getLocale()) }}
+                                <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('setlocale', ['locale' => 'en'])"
+                                            :active="app()->getLocale() === 'en'">
+                                English
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('setlocale', ['locale' => 'ru'])"
+                                            :active="app()->getLocale() === 'ru'">
+                                Русский
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
                 @else
                     <!-- Для неавторизованных пользователей - кнопки входа и регистрации -->
                     <div class="flex space-x-4">
                         <a href="{{ route('login') }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
-                            {{ __('Вход') }}
+                            {{ __('messages.login__btn') }}
                         </a>
                         <a href="{{ route('register') }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
-                            {{ __('Регистрация') }}
+                            {{ __('messages.regist__btn') }}
                         </a>
                     </div>
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
+                                {{ strtoupper(app()->getLocale()) }}
+                                <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('setlocale', ['locale' => 'en'])"
+                                            :active="app()->getLocale() === 'en'">
+                                English
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('setlocale', ['locale' => 'ru'])"
+                                            :active="app()->getLocale() === 'ru'">
+                                Русский
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
                 @endauth
             </div>
+
+
 
             <!-- Hamburger Menu (mobile) -->
             <div class="-me-2 flex items-center sm:hidden">
@@ -106,21 +151,21 @@
         <div class="pt-2 pb-3 space-y-1">
             @auth
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Менеджер задач') }}
+                {{ __('messages.main__link') }}
             </x-responsive-nav-link>
             @else
             <x-responsive-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
-                {{ __('Менеджер задач') }}
+                {{ __('messages.main__link') }}
             </x-responsive-nav-link>
             @endauth
             <x-responsive-nav-link :href="url('/tasks')" :active="request()->is('tasks')">
-                        {{ __('Задачи') }}
+                        {{ __('messages.tasks__link') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('task_statuses.index')" :active="request()->routeIs('task_statuses.index')">
-                        {{ __('Статусы') }}
+                        {{ __('messages.statuses__link') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="url('/labels')" :active="request()->is('labels')">
-                        {{ __('Метки') }}
+                        {{ __('messages.tags__link') }}
             </x-responsive-nav-link>
         </div>
 

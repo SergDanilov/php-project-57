@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Statuses') }}
+            {{ __('messages.statuses') }}
         </h2>
     </x-slot>
 
@@ -19,7 +19,7 @@
                         <div class="mb-4">
                             <a href="{{ route('task_statuses.create') }}"
                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                Create Status
+                                {{ __('messages.create__status') }}
                             </a>
                         </div>
                     @endauth
@@ -28,8 +28,8 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.name') }}</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.create') }}</th>
                                 @auth
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 @endauth
@@ -46,14 +46,14 @@
                                     @auth
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <a href="{{ route('task_statuses.edit', $status->id) }}"
-                                               class="text-yellow-600 hover:text-yellow-900 mr-3">Edit</a>
+                                               class="text-yellow-600 hover:text-yellow-900 mr-3">{{ __('messages.edit') }}</a>
                                             <form action="{{ route('task_statuses.destroy', $status->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
                                                         class="text-red-600 hover:text-red-900"
                                                         onclick="return confirm('Are you sure?')">
-                                                    Delete
+                                                    {{ __('messages.delete') }}
                                                 </button>
                                             </form>
                                         </td>

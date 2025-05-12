@@ -15,7 +15,7 @@
 
                         <div class="mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                             <div class="w-full">
-                                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+                                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.name') }}:</label>
                                 <input type="text"
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="name"
@@ -29,7 +29,7 @@
 
                             @if(isset($task_status->created_at))
                             <div class="w-full sm:w-auto">
-                                <label class="block text-gray-700 text-sm font-bold mb-2">Created at:</label>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.create') }}:</label>
                                 <div class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-gray-50">
                                     {{ $task_status->created_at->format('d.m.Y') }}
                                 </div>
@@ -39,11 +39,11 @@
                         <div class="flex items-center justify-between">
                             <button type="submit"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Update
+                                {{ __('messages.update') }}
                             </button>
                             <a href="{{ route('task_statuses.index') }}"
                                class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
-                                Cancel
+                                {{ __('messages.cancel') }}
                             </a>
                         </div>
                     </form>

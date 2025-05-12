@@ -34,7 +34,7 @@
             <!-- Футер -->
             <footer class="bg-dark py-4 mt-auto">
                 <section class="bg-dark dark:bg-gray-900">
-                @include('layouts.footer')
+                    @include('layouts.footer')
                 </section>
             </footer>
         </div>
