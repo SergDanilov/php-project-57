@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StatusController;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
 // Главная страница
@@ -9,11 +10,18 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-// Общие маршруты (доступны всем)
-Route::controller(StatusController::class)->group(function () {
-    Route::get('/task_statuses', 'index')->name('task_statuses.index');
-    Route::get('/task_statuses/{status}', 'show')->name('task_statuses.show');
-});
+Route::get('/locale/{locale}', function ($locale) {
+    if (!in_array($locale, ['en', 'ru'])) {
+        abort(400);
+    }
+
+    Cookie::queue('locale', $locale, 60*24*365); // 1 год
+    session()->put('locale', $locale);
+
+    return redirect()->back();
+})->name('setlocale');
+
+
 
 // Защищенные маршруты (только для авторизованных)
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -37,6 +45,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Общие маршруты (доступны всем)
+Route::controller(StatusController::class)->group(function () {
+    Route::get('/task_statuses', 'index')->name('task_statuses.index');
+    Route::get('/task_statuses/{status}', 'show')->name('task_statuses.show');
 });
 
 require __DIR__.'/auth.php';
