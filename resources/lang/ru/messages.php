@@ -12,7 +12,7 @@ return [
     'status__created' => 'Статус успешно добавлен.',
     'status__updated' => 'Статус успешно изменен.',
     'status__deleted' => 'Статус успешно удален.',
-    'status__cannot__be__deleted' => 'Нельзя удалить статус, так как он связан с задачами',
+    'status__cannot__be__deleted' => 'Не удалось удалить статус',
     'tasks' => 'Задачи',
     'description' => 'Описание',
     'author' => 'Автор',

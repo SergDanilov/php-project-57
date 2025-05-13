@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Task current') }}
+            {{ __('Task current:') }} {{ $task->name }}
         </h2>
     </x-slot>
     <div class="py-12">
@@ -13,20 +13,12 @@
 
                         <div class="mb-4 flex flex-col sm:flex-col sm:items-end sm:justify-between gap-4">
                             <div class="w-full">
-                                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.name') }}:</label>
-                                <input type="text" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="name" name="name" required>
-                                @error('name')
-                                    <div class="text-danger text-red-500 text-xs italic">{{ $message }}</div>
-                                @enderror
+                                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.name') }}: <span> {{ $task->name }}</span></label>
+
                             </div>
                             <div class="w-full">
                                 <label for="description" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.description') }}:</label>
-                                <input type="text" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32"
-                                    id="description" name="description">
-                                @error('description')
-                                    <div class="text-danger text-red-500 text-xs italic">{{ $message }}</div>
-                                @enderror
+                                <div>{{ $task->description }}</div>
                             </div>
 
                             <!-- Добавляем селект для статуса -->

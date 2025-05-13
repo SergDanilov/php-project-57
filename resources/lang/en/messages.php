@@ -13,7 +13,7 @@ return [
     'status__created' => 'Status created successfully.',
     'status__updated' => 'Status updated successfully.',
     'status__deleted' => 'Status deleted successfully.',
-    'status__cannot__be__deleted' => 'The status cannot be deleted because it is linked to tasks.',
+    'status__cannot__be__deleted' => 'The status cannot be deleted.',
     'tasks' => 'Tasks',
     'description' => 'Description',
     'author' => 'Author',
