@@ -39,7 +39,7 @@ class StatusController extends Controller
         Status::create($request->all());
 
         return redirect()->route('task_statuses.index')
-            ->with('success', 'Status created successfully.');
+            ->with('success', __('messages.status__created'));
     }
 
     /**
@@ -70,7 +70,7 @@ class StatusController extends Controller
         $task_status->update($request->all());
 
         return redirect()->route('task_statuses.index')
-            ->with('success', 'Status updated successfully');
+            ->with('success', __('messages.status__updated'));
     }
 
     /**
@@ -78,9 +78,22 @@ class StatusController extends Controller
      */
     public function destroy(Status $task_status)
     {
-        $task_status->delete();
+        try {
+            // Проверяем, есть ли связанные задачи
+            if ($task_status->tasks()->exists()) {
+                return redirect()->route('task_statuses.index')
+                    ->with('error', __('messages.status__cannot__be__deleted'));
+            }
 
-        return redirect()->route('task_statuses.index')
-            ->with('success', 'Status deleted successfully');
+            $task_status->delete();
+
+            return redirect()->route('task_statuses.index')
+                ->with('success', __('messages.status__deleted'));
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Дополнительная проверка на случай, если проверка выше не сработала
+            return redirect()->route('task_statuses.index')
+                ->with('error', __('messages.status__cannot__be__deleted'));
+        }
     }
 }
