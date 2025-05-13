@@ -9,6 +9,11 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
+                    @if(session('error'))
+                        <div class="mb-4 p-4 bg-red-100 text-red-700 rounded">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     @if (session('success'))
                         <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
                             {{ session('success') }}
