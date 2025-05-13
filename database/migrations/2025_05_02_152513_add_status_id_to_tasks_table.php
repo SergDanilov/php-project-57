@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->foreignId('status_id')->constrained('statuses');
-        });
+        // Schema::table('tasks', function (Blueprint $table) {
+        //     $table->foreignId('status_id')->constrained('statuses');
+        // });
     }
 
     /**
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            //
-        });
+        // Schema::table('tasks', function (Blueprint $table) {
+        //     //
+        // });
     }
 };
