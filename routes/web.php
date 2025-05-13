@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'destroy' => 'task_statuses.destroy',
         ]);
 
+    // Task CRUD (кроме index и show)
+    Route::resource('tasks', TaskController::class)
+        ->except(['index', 'show'])
+        ->names([
+            'create' => 'tasks.create',
+            'store' => 'tasks.store',
+            'edit' => 'tasks.edit',
+            'update' => 'tasks.update',
+            'destroy' => 'tasks.destroy',
+        ]);
+
     // Профиль
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -51,6 +63,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::controller(StatusController::class)->group(function () {
     Route::get('/task_statuses', 'index')->name('task_statuses.index');
     Route::get('/task_statuses/{status}', 'show')->name('task_statuses.show');
+});
+Route::controller(TaskController::class)->group(function () {
+    Route::get('/tasks', 'index')->name('tasks.index');
+    Route::get('/tasks/{task}', 'show')->name('tasks.show');
 });
 
 require __DIR__.'/auth.php';
