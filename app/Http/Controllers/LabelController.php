@@ -1,0 +1,97 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Label;
+use Illuminate\Http\Request;
+
+class LabelController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $labels = Label::orderBy('created_at', 'desc')
+                  ->paginate(10);
+        return view('labels.index', compact('labels'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('labels.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|unique:statuses|max:64',
+        ]);
+
+        Label::create($request->all());
+
+        return redirect()->route('labels.index')
+            ->with('success', __('messages.label__created'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Label $label)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Label $label)
+    {
+        return view('labels.edit', compact('label'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Label $label)
+    {
+        $request->validate([
+            'name' => 'required|unique:statuses,name,'.$label->id.'|max:64',
+        ]);
+
+        $label->update($request->all());
+
+        return redirect()->route('labels.index')
+            ->with('success', __('messages.label__updated'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Label $label)
+    {
+        try {
+            // Проверяем, есть ли связанные задачи
+            if ($label->tasks()->exists()) {
+                return redirect()->route('labels.index')
+                    ->with('error', __('messages.label__cannot__be__deleted'));
+            }
+
+            $label->delete();
+
+            return redirect()->route('labels.index')
+                ->with('success', __('messages.label__deleted'));
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Дополнительная проверка на случай, если проверка выше не сработала
+            return redirect()->route('labels.index')
+                ->with('error', __('messages.label__cannot__be__deleted'));
+        }
+    }
+}
