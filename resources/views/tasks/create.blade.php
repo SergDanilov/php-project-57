@@ -61,6 +61,15 @@
                                 @enderror
                             </div>
 
+                            <div class="w-full">
+                                <label for="labels" class="block text-gray-700 text-sm font-bold mb-2">Метки</label>
+                                <select name="labels[]" id="labels" multiple  class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    @foreach($labels as $label)
+                                        <option value="{{ $label->id }}">{{ $label->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <!-- Скрытое поле для created_by_id -->
                             <input type="hidden" name="created_by_id" value="{{ auth()->id() }}">
                         </div>

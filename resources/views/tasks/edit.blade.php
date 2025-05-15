@@ -51,7 +51,6 @@
                                 @enderror
                             </div>
 
-
                             <div class="w-full">
                                 <label for="assigned_to_id" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.executor') }}:</label>
                                 <select name="assigned_to_id" id="assigned_to_id" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -65,6 +64,20 @@
                                 @enderror
                             </div>
 
+                            <div class="w-full">
+                                <label for="labels" class="block text-gray-700 text-sm font-bold mb-2">Метки</label>
+                                <select name="labels[]" id="labels" multiple class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    @foreach($labels as $label)
+                                        <option value="{{ $label->id }}"
+                                            @selected(collect(old('labels', $task->labels->pluck('id')->toArray()))->contains($label->id))>
+                                            {{ $label->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('labels')
+                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
 
                             @if(isset($task->created_at))
                             <div class="w-full sm:w-auto">
@@ -80,7 +93,7 @@
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 {{ __('messages.update') }}
                             </button>
-                            <a href="{{ route('task_statuses.index') }}"
+                            <a href="{{ route('tasks.index') }}"
                                class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
                                 {{ __('messages.cancel') }}
                             </a>

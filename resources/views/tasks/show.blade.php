@@ -32,6 +32,26 @@
                                 </p>
                             </div>
 
+                            <div class="w-full">
+                                <p class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.labels') }}:
+                                    @forelse($task->labels as $label)
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-1">
+                                            {{ $label->name }}
+                                        </span>
+                                    @empty
+                                        <span class="text-gray-500 text-sm italic">{{ __('messages.no_labels') }}</span>
+                                    @endforelse
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div>
+
+                            <p class="px-6 py-4 whitespace-nowrap">
+
+                            </p>
+
                         </div>
 
                         <div class="flex items-center justify-between">

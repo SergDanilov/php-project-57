@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\LabelController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,7 @@ Route::get('/locale/{locale}', function ($locale) {
         abort(400);
     }
 
-    Cookie::queue('locale', $locale, 60*24*365); // 1 год
+    Cookie::queue('locale', $locale, 60 * 24 * 365); // 1 год
     session()->put('locale', $locale);
 
     return redirect()->back();
@@ -53,6 +54,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'destroy' => 'tasks.destroy',
         ]);
 
+    Route::resource('labels', LabelController::class)
+        ->except(['index', 'show'])
+        ->names([
+            'create' => 'labels.create',
+            'store' => 'labels.store',
+            'edit' => 'labels.edit',
+            'update' => 'labels.update',
+            'destroy' => 'labels.destroy',
+        ]);
+
     // Профиль
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -68,5 +79,9 @@ Route::controller(TaskController::class)->group(function () {
     Route::get('/tasks', 'index')->name('tasks.index');
     Route::get('/tasks/{task}', 'show')->name('tasks.show');
 });
+Route::controller(LabelController::class)->group(function () {
+    Route::get('/labels', 'index')->name('labels.index');
+    Route::get('/labels/{label}', 'show')->name('labels.show');
+});
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
