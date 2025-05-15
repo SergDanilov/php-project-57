@@ -1,4 +1,5 @@
 <?php
+
 return [
     'welcome' => 'Добро пожаловать в наше приложение',
     'remember' => 'Запомнить',
@@ -13,6 +14,7 @@ return [
     'status__updated' => 'Статус успешно изменен.',
     'status__deleted' => 'Статус успешно удален.',
     'status__cannot__be__deleted' => 'Не удалось удалить статус',
+    'label__cannot__be__deleted' => 'Не удалось удалить метку',
     'tasks' => 'Задачи',
     'description' => 'Описание',
     'author' => 'Автор',
@@ -24,6 +26,14 @@ return [
     'task__updated' => 'Задача успешно изменена.',
     'task__deleted' => 'Задача успешно удалена.',
     'tags__link' => 'Метки',
+    'labels' => 'Метки',
+    'no_labels' => 'Нет меток',
+    'create__label' => 'Создать метку',
+    'edit__label' => 'Править метку',
+    'show__label' => 'Показать метку',
+    'label__created' => 'Метка создана успешно.',
+    'label__updated' => 'Метка изменена успешно.',
+    'label__deleted' => 'Метка удалена успешно.',
     'login__btn' => 'Вход',
     'regist__btn' => 'Регистрация',
     'contacts' => 'Контакты',

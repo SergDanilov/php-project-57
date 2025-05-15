@@ -1,4 +1,5 @@
 <?php
+
 return [
     'welcome' => 'Welcome to our application',
     'greeting' => 'Hello, :name!',
@@ -14,6 +15,7 @@ return [
     'status__updated' => 'Status updated successfully.',
     'status__deleted' => 'Status deleted successfully.',
     'status__cannot__be__deleted' => 'The status cannot be deleted.',
+    'label__cannot__be__deleted' => 'The label cannot be deleted.',
     'tasks' => 'Tasks',
     'description' => 'Description',
     'author' => 'Author',
@@ -24,7 +26,15 @@ return [
     'task__created' => 'Task created successfully.',
     'task__updated' => 'Task updated successfully.',
     'task__deleted' => 'Task deleted successfully.',
-    'tags__link' => 'Tags',
+    'tags__link' => 'Labels',
+    'labels' => 'Labels',
+    'create__label' => 'Create label',
+    'edit__label' => 'Edit label',
+    'show__label' => 'Show label',
+    'no_labels' => 'No labels',
+    'label__created' => 'Label created successfully.',
+    'label__updated' => 'Label updated successfully.',
+    'label__deleted' => 'Label deleted successfully.',
     'login__btn' => 'Login',
     'regist__btn' => 'Registration',
     'contacts' => 'Contacts',
