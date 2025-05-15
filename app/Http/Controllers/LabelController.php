@@ -31,7 +31,7 @@ class LabelController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:statuses|max:64',
+            'name' => 'required|unique:labels|max:64',
         ]);
 
         Label::create($request->all());
