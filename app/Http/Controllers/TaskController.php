@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\Status;
+use App\Models\Label;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::with(['status', 'creator', 'assignee'])
+        $tasks = Task::with(['status', 'creator', 'assignee', 'labels'])
                     ->orderBy('created_at', 'desc')
                     ->paginate(10);
 
@@ -30,8 +31,9 @@ class TaskController extends Controller
     {
         $statuses = Status::all();
         $users = User::all();
+        $labels = Label::all();
 
-        return view('tasks.create', compact('statuses', 'users'));
+        return view('tasks.create', compact('statuses', 'users', 'labels'));
     }
 
     /**
@@ -46,7 +48,12 @@ class TaskController extends Controller
             'assigned_to_id' => 'exists:users,id',
         ]);
 
-        Task::create($request->all());
+        $task = Task::create($request->all());
+
+        // Привязка меток к задаче
+        if ($request->has('labels')) {
+            $task->labels()->attach($request->input('labels'));
+        }
 
         return redirect()->route('tasks.index')
             ->with('success', __('messages.task__created'));
@@ -59,8 +66,9 @@ class TaskController extends Controller
     {
         $statuses = Status::all();
         $users = User::all();
+        $labels = Label::all();
 
-        return view('tasks.show', compact('task','statuses', 'users'));
+        return view('tasks.show', compact('task','statuses', 'users', 'labels'));
     }
 
     /**
@@ -70,8 +78,9 @@ class TaskController extends Controller
     {
         $statuses = Status::all();
         $users = User::all();
+        $labels = Label::all();
 
-        return view('tasks.edit', compact('task','statuses', 'users'));
+        return view('tasks.edit', compact('task','statuses', 'users', 'labels'));
     }
 
     /**
@@ -81,8 +90,17 @@ class TaskController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:tasks,name,'.$task->id.'|max:255',
+            'labels' => 'array', // Добавьте это правило валидации
+        'labels.*' => 'exists:labels,id',
         ]);
+
         $task->update($request->all());
+         // Обновление меток
+        if ($request->has('labels')) {
+            $task->labels()->sync($request->input('labels'));
+        } else {
+            $task->labels()->sync([]); // Удалить все метки, если метки не переданы
+        }
 
         return redirect()->route('tasks.index')
             ->with('success', __('messages.task__updated'));

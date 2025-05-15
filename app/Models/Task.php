@@ -16,9 +16,20 @@ class Task extends Model
         'created_by_id',
         'assigned_to_id'
     ];
+
+    // public function labels()
+    // {
+    //     return $this->hasMany(Label::class, 'task_id');
+    // }
+
     public function status()
     {
         return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function labels()
+    {
+        return $this->belongsToMany(Label::class, 'task_label', 'task_id', 'label_id');
     }
 
     public function creator()
