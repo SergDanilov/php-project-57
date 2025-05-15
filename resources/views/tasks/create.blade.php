@@ -23,8 +23,12 @@
                             </div>
                             <div class="w-full">
                                 <label for="description" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.description') }}:</label>
-                                <input type="text" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32"
-                                    id="description" name="description">
+                                <textarea
+                                class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32 text-left align-top resize-none"
+                                id="description"
+                                name="description"
+                                style="text-align: left; white-space: pre-wrap; word-wrap: break-word;">
+                                </textarea>
                                 @error('description')
                                     <div class="text-danger text-red-500 text-xs italic">{{ $message }}</div>
                                 @enderror

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Task current:') }} {{ $task->name }}
+            {{ __('messages.show__task') }}: {{ $task->name }}
         </h2>
     </x-slot>
     <div class="py-12">
@@ -13,50 +13,36 @@
 
                         <div class="mb-4 flex flex-col sm:flex-col sm:items-end sm:justify-between gap-4">
                             <div class="w-full">
-                                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.name') }}: <span> {{ $task->name }}</span></label>
-
+                                <p class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.name') }}: <span class="font-normal"> {{ $task->name }}</span></p>
                             </div>
                             <div class="w-full">
-                                <label for="description" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.description') }}:</label>
-                                <div>{{ $task->description }}</div>
+                                <p class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.description') }}:</p>
+                                <p>{{ $task->description }}</p>
                             </div>
 
-                            <!-- Добавляем селект для статуса -->
+                            <!-- статус -->
                             <div class="w-full">
-                                <label for="status_id" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.status') }}:</label>
-                                <select name="status_id" id="status_id" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-
-                                    @foreach($statuses as $status)
-                                        <option value="{{ $status->id }}">{{ $status->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('status_id')
-                                    <div class="text-danger text-red-500 text-xs italic">{{ $message }}</div>
-                                @enderror
+                                <p class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.status') }}: <span    class="font-normal">{{ $task->status->name }}</span>
+                                </p>
                             </div>
 
-                            <!-- Добавляем селект для исполнителя -->
+                            <!-- исполнитель -->
                             <div class="w-full">
-                                <label for="assigned_to_id" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.executor') }}:</label>
-                                <select name="assigned_to_id" id="assigned_to_id" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                    @foreach($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('assigned_to_id')
-                                    <div class="text-danger text-red-500 text-xs italic">{{ $message }}</div>
-                                @enderror
+                                <p class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.executor') }}: <span    class="font-normal">{{ $task->assignee->name }}</span>
+                                </p>
                             </div>
 
-                            <!-- Скрытое поле для created_by_id -->
-                            <input type="hidden" name="created_by_id" value="{{ auth()->id() }}">
                         </div>
 
                         <div class="flex items-center justify-between">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                {{ __('messages.create__task') }}
+                            <button type="submit"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded focus:outline-none focus:shadow-outline">
+                                <a href="{{ route('tasks.edit', $task->id) }}"
+                                    class="text-white-600 hover:text-white-900 py-2 px-4">{{ __('messages.edit') }}
+                                </a>
                             </button>
-                            <a href="{{ route('tasks.index') }}" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+                            <a href="{{ route('tasks.index') }}"
+                               class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
                                 {{ __('messages.cancel') }}
                             </a>
                         </div>

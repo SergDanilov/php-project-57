@@ -20,6 +20,7 @@ return [
     'executor' => 'Executor',
     'create__task' => 'Create task',
     'edit__task' => 'Edit task',
+    'show__task' => 'Show task',
     'task__created' => 'Task created successfully.',
     'task__updated' => 'Task updated successfully.',
     'task__deleted' => 'Task deleted successfully.',

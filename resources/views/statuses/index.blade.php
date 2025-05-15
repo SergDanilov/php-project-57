@@ -30,26 +30,26 @@
                     @endauth
 
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                        <thead class="bg-gray-200">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.name') }}</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.create') }}</th>
                                 @auth
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.actions') }}</th>
                                 @endauth
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($statuses as $status)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $status->id }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $status->name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">{{ $status->id }}</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">{{ $status->name }}</td>
+                                    <td class="px-6 py-2 whitespace-nowrap">
                                         {{ $status->created_at->format('d.m.Y') }}
                                     </td>
                                     @auth
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <td class="px-6 py-2 whitespace-nowrap text-sm font-medium">
                                             <a href="{{ route('task_statuses.edit', $status->id) }}"
                                                class="text-yellow-600 hover:text-yellow-900 mr-3">{{ __('messages.edit') }}</a>
                                             <form action="{{ route('task_statuses.destroy', $status->id) }}" method="POST" class="inline">
@@ -67,6 +67,10 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <!-- Пагинация -->
+                    <div class="mt-4">
+                        {{ $statuses->links() }}
+                    </div>
                 </div>
             </div>
         </div>

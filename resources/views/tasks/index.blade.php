@@ -25,7 +25,7 @@
                     @endauth
 
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                        <thead class="bg-gray-200">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.status') }}</th>
@@ -41,35 +41,41 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($tasks as $task)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $task->id }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"> {{ $task->status->name ?? 'Без статуса' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-500">
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">{{ $task->id }}</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500"> {{ $task->status->name ?? 'Без статуса' }}</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-blue-500">
                                         <a href="{{ route('tasks.show', $task->id) }}">{{ $task->name }}</a>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $task->creator->name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $task->assignee->name ?? 'Не назначено' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">{{ $task->creator->name }}</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">{{ $task->assignee->name ?? 'Не назначено' }}</td>
+                                    <td class="px-6 py-2 whitespace-nowrap">
                                         {{ $task->created_at->format('d.m.Y') }}
                                     </td>
                                     @auth
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <td class="px-6 py-2 whitespace-nowrap text-sm font-medium">
                                             <a href="{{ route('tasks.edit', $task->id) }}"
                                                class="text-yellow-600 hover:text-yellow-900 mr-3">{{ __('messages.edit') }}</a>
-                                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        class="text-red-600 hover:text-red-900"
-                                                        onclick="return confirm('Are you sure?')">
-                                                    {{ __('messages.delete') }}
-                                                </button>
-                                            </form>
+                                            @if(auth()->id() === $task->created_by_id)
+                                                <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                            class="text-red-600 hover:text-red-900"
+                                                            onclick="return confirm('Are you sure?')">
+                                                        {{ __('messages.delete') }}
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </td>
                                     @endauth
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    <!-- Пагинация -->
+                    <div class="mt-4">
+                        {{ $tasks->links() }}
+                    </div>
                 </div>
             </div>
         </div>

@@ -28,11 +28,11 @@
                             </div>
                             <div class="w-full">
                                 <label for="description" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.description') }}:</label>
-                                <input type="text"
+                                <textarea
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="description"
-                                    name="description"
-                                    value="{{ old('description', $task->description) }}">
+                                    name="description">{{ old('description', $task->description ?? '') }}
+                                </textarea>
                                 @error('description')
                                     <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                 @enderror
@@ -41,6 +41,7 @@
                             <div class="w-full">
                                 <label for="status_id" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.status') }}:</label>
                                 <select name="status_id" id="status_id" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                                    <option value="{{ $task->status->id }}">{{ $task->status->name }}</option>
                                     @foreach($statuses as $status)
                                         <option value="{{ old('status', $status->id) }}">{{ $status->name }}</option>
                                     @endforeach
@@ -54,6 +55,7 @@
                             <div class="w-full">
                                 <label for="assigned_to_id" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.executor') }}:</label>
                                 <select name="assigned_to_id" id="assigned_to_id" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    <option value="{{ $task->assignee->id }}">{{ $task->assignee->name }}</option>
                                     @foreach($users as $user)
                                         <option value="{{ old('user', $user->id)}}">{{ $user->name }}</option>
                                     @endforeach

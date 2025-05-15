@@ -5,21 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Status;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index()
-{
-    $tasks = Task::with(['status', 'creator', 'assignee'])
-                ->orderBy('created_at', 'desc')
-                ->paginate(10);
+    {
+        $tasks = Task::with(['status', 'creator', 'assignee'])
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
 
-    return view('tasks.index', compact('tasks'));
-}
+        return view('tasks.index', compact('tasks'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -91,9 +93,11 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        $this->authorize('delete', $task);
+
         $task->delete();
 
         return redirect()->route('tasks.index')
-            ->with('success', __('messages.task__deleted'));
+        ->with('success', __('messages.task_deleted'));
     }
 }
