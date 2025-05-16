@@ -47,4 +47,10 @@ return [
     'delete' => 'Удалить',
     'cancel' => 'Сбросить',
     'apply__filters' => 'Применить',
+    'login' => 'Войти',
+    'forgot__password' => 'Забыли пароль?',
+    'password' => 'Пароль',
+    'register' => 'Зарегистрировать',
+    'registered' => 'Уже зарегистрированы?',
+    'confirm__pass' => 'Подтвердить пароль',
 ];

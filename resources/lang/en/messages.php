@@ -48,4 +48,10 @@ return [
     'delete' => 'Delete',
     'cancel' => 'Cancel',
     'apply__filters' => 'Go',
+    'login' => 'Log in',
+    'forgot__password' => 'Forgot your password?',
+    'password' => 'Password',
+    'register' => 'Register',
+    'registered' => 'Already registered?',
+    'confirm__pass' => 'Confirm Password',
 ];
