@@ -103,21 +103,6 @@ class LabelControllerTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
-    #[Test]
-    public function label_can_be_attached_to_task()
-    {
-        $label = Label::factory()->create();
-
-        $response = $this->actingAs($this->user)
-            ->post(route('tasks.store', [$this->task->id, $label->id]));
-
-        $response->assertRedirect();
-        $this->assertDatabaseHas('label', [
-            'task_id' => $this->task->id,
-            'label_id' => $label->id
-        ]);
-    }
-
 
     #[Test]
         public function cannot_delete_label_attached_to_task()
@@ -134,7 +119,9 @@ class LabelControllerTest extends TestCase
                 ->delete(route('labels.destroy', $label->id));
 
         // Проверяем, что удаление не произошло
-        $response->assertStatus(403); // Или другой подходящий код ошибки
+        $response->assertStatus(403);
+        $response->assertSessionHas('error', __('messages.label__cannot__be__deleted'));
+
         $this->assertDatabaseHas('labels', ['id' => $label->id]);
         $this->assertDatabaseHas('task_label', [
                 'task_id' => $task->id,

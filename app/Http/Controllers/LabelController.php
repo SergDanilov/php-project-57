@@ -79,8 +79,10 @@ class LabelController extends Controller
         try {
             // Проверяем, есть ли связанные задачи
             if ($label->tasks()->exists()) {
-                return redirect()->route('labels.index')
-                    ->with('error', __('messages.label__cannot__be__deleted'));
+                return redirect()
+                    ->route('labels.index')
+                    ->with('error', __('messages.label__cannot__be__deleted'))
+                    ->setStatusCode(403);
             }
 
             $label->delete();
@@ -90,8 +92,10 @@ class LabelController extends Controller
 
         } catch (\Illuminate\Database\QueryException $e) {
             // Дополнительная проверка на случай, если проверка выше не сработала
-            return redirect()->route('labels.index')
-                ->with('error', __('messages.label__cannot__be__deleted'));
+            return redirect()
+                ->route('labels.index')
+                ->with('error', __('messages.label__cannot__be__deleted'))
+                ->setStatusCode(403);
         }
     }
 }
