@@ -97,6 +97,17 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'sqlite_test' => [
+            'driver' => 'sqlite',
+            'url' => env('TEST_DB_URL'),
+            'database' => env('TEST_DB_DATABASE', database_path('database.sqlite')),
+            'prefix' => '',
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+            'busy_timeout' => null,
+            'journal_mode' => null,
+            'synchronous' => null,
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),
