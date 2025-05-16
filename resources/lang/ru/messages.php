@@ -46,4 +46,5 @@ return [
     'update' => 'Сохранить',
     'delete' => 'Удалить',
     'cancel' => 'Сбросить',
+    'apply__filters' => 'Применить',
 ];

@@ -47,4 +47,5 @@ return [
     'update' => 'Update',
     'delete' => 'Delete',
     'cancel' => 'Cancel',
+    'apply__filters' => 'Go',
 ];
