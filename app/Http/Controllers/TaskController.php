@@ -6,6 +6,8 @@ use App\Models\Task;
 use App\Models\Status;
 use App\Models\Label;
 use App\Models\User;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
@@ -17,11 +19,24 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::with(['status', 'creator', 'assignee', 'labels'])
-                    ->orderBy('created_at', 'desc')
-                    ->paginate(10);
+        $tasks = QueryBuilder::for(Task::class)
+            ->with(['status', 'creator', 'assignee', 'labels'])
+            ->allowedFilters([
+                AllowedFilter::exact('status_id'),
+                AllowedFilter::exact('created_by_id', 'creator.id'),
+                AllowedFilter::exact('assigned_to_id', 'assignee.id'),
+                AllowedFilter::exact('labels.id'),
+                AllowedFilter::partial('name'),
+            ])
+            ->allowedSorts(['created_at', 'name'])
+            ->defaultSort('-created_at')
+            ->paginate(10);
 
-        return view('tasks.index', compact('tasks'));
+        $statuses = Status::pluck('name', 'id');
+        $users = User::pluck('name', 'id');
+        $labels = Label::pluck('name', 'id');
+
+        return view('tasks.index', compact('tasks', 'statuses', 'users', 'labels'));
     }
 
     /**
