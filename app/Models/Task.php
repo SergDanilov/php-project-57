@@ -17,10 +17,6 @@ class Task extends Model
         'assigned_to_id'
     ];
 
-    // public function labels()
-    // {
-    //     return $this->hasMany(Label::class, 'task_id');
-    // }
 
     public function status()
     {
