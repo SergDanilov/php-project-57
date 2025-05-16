@@ -24,6 +24,58 @@
                         </div>
                     @endauth
 
+                    <!-- Фильтры -->
+                    <div class="mb-6 bg-gray-50 p-0 rounded-lg">
+                        <form method="GET" action="{{ route('tasks.index') }}" class="space-y-4 md:space-y-0 md:flex md:space-x-1">
+                            <!-- Фильтр по статусу -->
+                            <div class="relative">
+                                <select name="filter[status_id]" class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                                    <option value="">{{ __('messages.status') }}</option>
+                                    @foreach($statuses as $id => $name)
+                                        <option value="{{ $id }}" {{ request('filter.status_id') == $id ? 'selected' : '' }}>
+                                            {{ $name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Фильтр по автору -->
+                            <div class="relative">
+                                <select name="filter[created_by_id]" class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                                    <option value="">{{ __('messages.author') }}</option>
+                                    @foreach($users as $id => $name)
+                                        <option value="{{ $id }}" {{ request('filter.created_by_id') == $id ? 'selected' : '' }}>
+                                            {{ $name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Фильтр по исполнителю -->
+                            <div class="relative">
+                                <select name="filter[assigned_to_id]" class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                                    <option value="">{{ __('messages.executor') }}</option>
+                                    @foreach($users as $id => $name)
+                                        <option value="{{ $id }}" {{ request('filter.assigned_to_id') == $id ? 'selected' : '' }}>
+                                            {{ $name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Кнопки -->
+                            <div class="flex space-x-2">
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    {{ __('messages.apply__filters') }}
+                                </button>
+                                <a href="{{ route('tasks.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                    {{ __('messages.cancel') }}
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Таблица -->
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-200">
                             <tr>
@@ -72,9 +124,10 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <!-- Пагинация -->
+
+                    <!-- Пагинация с сохранением параметров фильтрации -->
                     <div class="mt-4">
-                        {{ $tasks->links() }}
+                        {{ $tasks->withQueryString()->links() }}
                     </div>
                 </div>
             </div>
