@@ -17,9 +17,7 @@ class SetLocale
     {
         if ($request->hasCookie('locale')) {
             app()->setLocale($request->cookie('locale'));
-        }
-        // Затем проверяем сессию (если используете)
-        elseif (session()->has('locale')) {
+        } elseif (session()->has('locale')) {
             app()->setLocale(session()->get('locale'));
         }
         return $next($request);

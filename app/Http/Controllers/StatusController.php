@@ -64,7 +64,7 @@ class StatusController extends Controller
     public function update(Request $request, Status $task_status)
     {
         $request->validate([
-            'name' => 'required|unique:statuses,name,'.$task_status->id.'|max:255',
+            'name' => 'required|unique:statuses,name,' . $task_status->id . '|max:255',
         ]);
 
         $task_status->update($request->all());
@@ -89,7 +89,6 @@ class StatusController extends Controller
 
             return redirect()->route('task_statuses.index')
                 ->with('success', __('messages.status__deleted'));
-
         } catch (\Illuminate\Database\QueryException $e) {
             // Дополнительная проверка на случай, если проверка выше не сработала
             return redirect()->route('task_statuses.index')

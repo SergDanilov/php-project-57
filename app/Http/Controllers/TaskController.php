@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
@@ -83,7 +84,7 @@ class TaskController extends Controller
         $users = User::all();
         $labels = Label::all();
 
-        return view('tasks.show', compact('task','statuses', 'users', 'labels'));
+        return view('tasks.show', compact('task', 'statuses', 'users', 'labels'));
     }
 
     /**
@@ -95,7 +96,7 @@ class TaskController extends Controller
         $users = User::all();
         $labels = Label::all();
 
-        return view('tasks.edit', compact('task','statuses', 'users', 'labels'));
+        return view('tasks.edit', compact('task', 'statuses', 'users', 'labels'));
     }
 
     /**
@@ -104,9 +105,9 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         $request->validate([
-            'name' => 'required|unique:tasks,name,'.$task->id.'|max:255',
-            'labels' => 'array', // Добавьте это правило валидации
-        'labels.*' => 'exists:labels,id',
+            'name' => 'required|unique:tasks,name,' . $task->id . '|max:255',
+            'labels' => 'array',
+            'labels.*' => 'exists:labels,id',
         ]);
 
         $task->update($request->all());

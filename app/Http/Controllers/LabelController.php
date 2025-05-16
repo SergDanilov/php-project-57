@@ -62,7 +62,7 @@ class LabelController extends Controller
     public function update(Request $request, Label $label)
     {
         $request->validate([
-            'name' => 'required|unique:statuses,name,'.$label->id.'|max:64',
+            'name' => 'required|unique:statuses,name,' . $label->id . '|max:64',
         ]);
 
         $label->update($request->all());
@@ -89,7 +89,6 @@ class LabelController extends Controller
 
             return redirect()->route('labels.index')
                 ->with('success', __('messages.label__deleted'));
-
         } catch (\Illuminate\Database\QueryException $e) {
             // Дополнительная проверка на случай, если проверка выше не сработала
             return redirect()
