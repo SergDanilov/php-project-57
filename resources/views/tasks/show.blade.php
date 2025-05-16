@@ -33,9 +33,21 @@
                             </div>
 
                             <div class="w-full">
-                                <p class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.labels') }}:
+                                <p class="block text-gray-700 text-sm font-bold mb-2">
+                                    {{ __('messages.labels') }}:
                                     @forelse($task->labels as $label)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-1">
+                                        @php
+                                            $labelClasses = match(strtolower($label->name)) {
+                                                'срочно!' => 'bg-red-100 text-red-800',
+                                                'новая' => 'bg-green-100 text-green-800',
+                                                default => 'bg-blue-100 text-blue-800'
+                                            };
+                                        @endphp
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $labelClasses }} mr-1">
+                                            <!-- Иконка метки -->
+                                            <svg class="w-3 h-3 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M5.5 3A2.5 2.5 0 003 5.5v9A2.5 2.5 0 005.5 17h9a2.5 2.5 0 002.5-2.5v-9A2.5 2.5 0 0014.5 3h-9zM6 7a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H7z" clip-rule="evenodd" />
+                                            </svg>
                                             {{ $label->name }}
                                         </span>
                                     @empty
