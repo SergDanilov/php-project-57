@@ -54,4 +54,5 @@ return [
     'register' => 'Register',
     'registered' => 'Already registered?',
     'confirm__pass' => 'Confirm Password',
+    'reset__pass' => 'Reset password',
 ];

@@ -4,7 +4,11 @@
 
     <form method="POST" action="{{ route('login') }}">
         @csrf
-
+        <div class="text-center mb-4 font-bold">
+            <h2>
+                <a href="{{ route('welcome') }}" class="text-decoration-none ">Менеджер задач</a>
+            </h2>
+        </div>
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />

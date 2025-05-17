@@ -2,6 +2,12 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
+        <div class="text-center mb-4 font-bold">
+            <h2>
+                <a href="{{ route('welcome') }}" class="text-decoration-none">Менеджер задач</a>
+            </h2>
+        </div>
+
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('messages.name')" />

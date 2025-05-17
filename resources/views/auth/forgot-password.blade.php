@@ -18,7 +18,7 @@
 
         <div class="flex items-center justify-end mt-4">
             <x-primary-button>
-                {{ __('Email Password Reset Link') }}
+                {{ __('messages.reset__pass') }}
             </x-primary-button>
         </div>
     </form>
