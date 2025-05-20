@@ -44,7 +44,7 @@
             @endif
 
             <x-primary-button class="ms-3">
-                {{ __('messages.login') }}
+                {{ __('Войти') }}
             </x-primary-button>
         </div>
     </form>

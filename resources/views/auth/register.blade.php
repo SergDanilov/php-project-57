@@ -51,7 +51,7 @@
             </a>
 
             <x-primary-button class="ms-4">
-                {{ __('messages.register') }}
+                {{ __('Зарегистрировать') }}
             </x-primary-button>
         </div>
     </form>
