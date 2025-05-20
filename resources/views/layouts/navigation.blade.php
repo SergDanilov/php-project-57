@@ -101,12 +101,17 @@
                 @else
                     <!-- Для неавторизованных пользователей - кнопки входа и регистрации -->
                     <div class="flex space-x-4">
-                        <a href="{{ route('login') }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
-                            {{ __('messages.login__btn') }}
-                        </a>
-                        <a href="{{ route('register') }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
-                            {{ __('messages.regist__btn') }}
-                        </a>
+                        <form action="{{ route('login') }}" method="GET">
+                            <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
+                                {{ __('Войти') }}
+                            </button>
+                        </form>
+
+                        <form action="{{ route('register') }}" method="GET">
+                            <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
+                                {{ __('Регистрация') }}
+                            </button>
+                        </form>
                     </div>
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
@@ -194,7 +199,7 @@
                     </form>
                 @else
                     <x-responsive-nav-link :href="route('login')">
-                        {{ __('Log In') }}
+                        {{ __('Войти') }}
                     </x-responsive-nav-link>
                 @endauth
             </div>
