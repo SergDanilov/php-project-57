@@ -57,15 +57,7 @@
                             </div>
 
                         </div>
-
-                        <div>
-
-                            <p class="px-6 py-4 whitespace-nowrap">
-
-                            </p>
-
-                        </div>
-
+                    @can('update', $task)
                         <div class="flex items-center justify-between">
                             <button type="submit"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded focus:outline-none focus:shadow-outline">
@@ -78,6 +70,7 @@
                                 {{ __('messages.cancel') }}
                             </a>
                         </div>
+                    @endcan
                     </form>
                 </div>
             </div>

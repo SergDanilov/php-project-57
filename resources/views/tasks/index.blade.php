@@ -103,10 +103,13 @@
                                     <td class="px-6 py-2 whitespace-nowrap">
                                         {{ $task->created_at->format('d.m.Y') }}
                                     </td>
-                                    @auth
+                                    @can('update', $task)
                                         <td class="px-6 py-2 whitespace-nowrap text-sm font-medium">
-                                            <a href="{{ route('tasks.edit', $task->id) }}"
-                                               class="text-yellow-600 hover:text-yellow-900 mr-3">{{ __('messages.edit') }}</a>
+
+                                                <a href="{{ route('tasks.edit', $task->id) }}"
+                                                class="text-yellow-600 hover:text-yellow-900 mr-3">{{ __('messages.edit') }}
+                                                </a>
+
                                             @if(auth()->id() === $task->created_by_id)
                                                 <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="inline">
                                                     @csrf
@@ -119,7 +122,7 @@
                                                 </form>
                                             @endif
                                         </td>
-                                    @endauth
+                                    @endcan
                                 </tr>
                             @endforeach
                         </tbody>

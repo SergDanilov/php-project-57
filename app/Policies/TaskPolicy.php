@@ -29,7 +29,7 @@ class TaskPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user !== null;
     }
 
     /**
@@ -37,7 +37,7 @@ class TaskPolicy
      */
     public function update(User $user, Task $task): bool
     {
-        return false;
+        return $user !== null;
     }
 
     /**
@@ -53,7 +53,7 @@ class TaskPolicy
      */
     public function restore(User $user, Task $task): bool
     {
-        return false;
+        return $user !== null;
     }
 
     /**
@@ -61,6 +61,6 @@ class TaskPolicy
      */
     public function forceDelete(User $user, Task $task): bool
     {
-        return false;
+        return $user->id === $task->created_by_id;
     }
 }

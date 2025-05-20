@@ -45,6 +45,8 @@ class TaskController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Task::class);
+
         $statuses = Status::all();
         $users = User::all();
         $labels = Label::all();
@@ -57,6 +59,9 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+
+        $this->authorize('create', Task::class);
+
         $request->validate([
             'name' => 'required|unique:tasks|max:255',
             'description' => 'max:1024',
@@ -92,6 +97,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
+        $this->authorize('update', $task);
         $statuses = Status::all();
         $users = User::all();
         $labels = Label::all();
@@ -104,6 +110,7 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+        $this->authorize('update', $task);
         $request->validate([
             'name' => 'required|unique:tasks,name,' . $task->id . '|max:255',
             'labels' => 'array',

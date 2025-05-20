@@ -73,7 +73,7 @@
                             <!-- Скрытое поле для created_by_id -->
                             <input type="hidden" name="created_by_id" value="{{ auth()->id() }}">
                         </div>
-
+                    @can('create', $task)
                         <div class="flex items-center justify-between">
                             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 {{ __('messages.create__task') }}
@@ -82,6 +82,7 @@
                                 {{ __('messages.cancel') }}
                             </a>
                         </div>
+                    @endcan
                     </form>
                 </div>
             </div>
