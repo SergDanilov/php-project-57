@@ -1,4 +1,4 @@
-<div class="max-w-screen-xl px-4 pt-20 pb-8 mx-auto lg:py-16 lg:pt-28">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center">
         <!-- Блок ссылок (левый) -->
         <div class="mb-6 lg:mb-0 lg:mr-8">

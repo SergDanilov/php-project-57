@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <!-- <title>{{ config('app.name', 'Laravel') }}</title> -->
         <title>{{ __('Менеджер задач') }}</title>
 
         <!-- Fonts -->
@@ -15,8 +14,8 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+    <body class="font-sans antialiased flex flex-col min-h-screen">
+        <div class="flex-grow">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -29,15 +28,16 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main class="flex-grow">
                 {{ $slot }}
             </main>
-            <!-- Футер -->
-            <footer class="bg-dark py-4 mt-auto">
-                <section class="bg-dark dark:bg-gray-900">
-                    @include('layouts.footer')
-                </section>
-            </footer>
         </div>
+
+        <!-- Футер -->
+        <footer class="bg-dark py-4">
+            <section class="bg-dark dark:bg-gray-900">
+                @include('layouts.footer')
+            </section>
+        </footer>
     </body>
 </html>
