@@ -103,13 +103,13 @@
                     <div class="flex space-x-4">
                         <form action="{{ route('login') }}" method="GET">
                             <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
-                                {{ __('Войти') }}
+                                {{ __('messages.login__btn') }}
                             </button>
                         </form>
 
                         <form action="{{ route('register') }}" method="GET">
                             <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
-                                {{ __('Регистрация') }}
+                                {{ __('messages.regist__btn') }}
                             </button>
                         </form>
                     </div>
