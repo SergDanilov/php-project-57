@@ -30,9 +30,15 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => [
+                'required',
+                'confirmed',
+                'string',
+                'min:8',
+            ],
+        ], [
+            'password.min' => 'Пароль должен содержать не менее 8 символов',
+            'password.confirmed' => 'Пароль и подтверждение пароля не совпадают',
         ]);
 
         $user = User::create([
