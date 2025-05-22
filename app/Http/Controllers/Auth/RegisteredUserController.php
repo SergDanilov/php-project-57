@@ -37,8 +37,8 @@ class RegisteredUserController extends Controller
                 'min:8',
             ],
         ], [
-            'password.min' => 'Пароль должен содержать не менее 8 символов',
-            'password.confirmed' => 'Пароль и подтверждение пароля не совпадают',
+            'password.min' => 'Пароль должен иметь длину не менее 8 символов',
+            'password.confirmed' => 'Пароль и подтверждение не совпадают',
         ]);
 
         $user = User::create([
