@@ -4,7 +4,7 @@
 
         <div class="text-center mb-4 font-bold">
             <h2>
-                <a href="{{ route('welcome') }}" class="text-decoration-none">Менеджер задач</a>
+                <a href="{{ route('dashboard') }}" class="text-decoration-none">Менеджер задач</a>
             </h2>
         </div>
 
