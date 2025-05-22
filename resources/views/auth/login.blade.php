@@ -6,7 +6,7 @@
         @csrf
         <div class="text-center mb-4 font-bold">
             <h2>
-                <a href="{{ route('welcome') }}" class="text-decoration-none ">Менеджер задач</a>
+                <a href="{{ route('dashboard') }}" class="text-decoration-none ">Менеджер задач</a>
             </h2>
         </div>
         <!-- Email Address -->
@@ -44,7 +44,7 @@
             @endif
 
             <x-primary-button class="ms-3">
-                {{ __('Войти') }}
+                {{ __('messages.login') }}
             </x-primary-button>
         </div>
     </form>

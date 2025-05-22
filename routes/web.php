@@ -7,10 +7,6 @@ use App\Http\Controllers\LabelController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
-// Главная страница
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
 
 Route::get('/locale/{locale}', function ($locale) {
     if (!in_array($locale, ['en', 'ru'])) {
@@ -24,11 +20,10 @@ Route::get('/locale/{locale}', function ($locale) {
 })->name('setlocale');
 
 
-
 // Защищенные маршруты (только для авторизованных)
 Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard
-    Route::get('/dashboard', function () {
+    Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
 
@@ -71,6 +66,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // Общие маршруты (доступны всем)
+// Главная страница
+Route::get('/', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
 Route::controller(StatusController::class)->group(function () {
     Route::get('/task_statuses', 'index')->name('task_statuses.index');
     Route::get('/task_statuses/{status}', 'show')->name('task_statuses.show');

@@ -11,7 +11,7 @@
                             <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                         </a>
                     @else
-                        <a href="{{ route('welcome') }}">
+                        <a href="{{ route('dashboard') }}">
                             <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                         </a>
                     @endauth
@@ -24,7 +24,7 @@
                             {{ __('messages.main__link') }}
                         </x-nav-link>
                     @else
-                        <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                             {{ __('messages.main__link') }}
                         </x-nav-link>
                     @endauth
@@ -43,6 +43,7 @@
                     <x-nav-link :href="url('/labels')" :active="request()->is('labels')">
                         {{ __('messages.tags__link') }}
                     </x-nav-link>
+
                 </div>
             </div>
 
@@ -98,6 +99,20 @@
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
+            @auth
+
+                    <button class="inline-flex items-center px-0 py-0 border border-transparent text-sm leading-4 font-medium rounded-md text-white-500 bg-blue-500 hover:text-blue-700 focus:outline-none transition ease-in-out duration-150">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <x-nav-link :href="route('logout')" class="text-white hover:bg-blue-600 hover:text-white px-3 py-1"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Выход') }}
+                            </x-nav-link>
+                        </form>
+                    </button>
+
+            @endauth
                 @else
                     <!-- Для неавторизованных пользователей - кнопки входа и регистрации -->
                     <div class="flex space-x-4">
@@ -159,7 +174,7 @@
                 {{ __('messages.main__link') }}
             </x-responsive-nav-link>
             @else
-            <x-responsive-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('messages.main__link') }}
             </x-responsive-nav-link>
             @endauth
