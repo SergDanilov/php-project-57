@@ -34,7 +34,11 @@ class StatusController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:statuses|max:255',
-        ]);
+            ], [
+                'name.unique' => 'Статус с таким именем уже существует',
+                'name.required' => 'Это обязательное поле',
+            ]
+        );
 
         Status::create($request->all());
 

@@ -32,7 +32,11 @@ class LabelController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:labels|max:64',
-        ]);
+            ], [
+                'name.unique' => 'Метка с таким именем уже существует',
+                'name.required' => 'Это обязательное поле',
+            ]
+        );
 
         Label::create($request->all());
 
