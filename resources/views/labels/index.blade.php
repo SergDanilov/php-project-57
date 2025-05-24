@@ -58,7 +58,7 @@
                                                 <form action="{{ route('labels.destroy', $label->id) }}" method="POST" class="inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit"
+                                                    <button type="submit" data-confirm="Вы уверены?" data-method="delete"
                                                             class="text-red-600 hover:text-red-900"
                                                             onclick="return confirm('Вы уверены?')">
                                                         {{ __('messages.delete') }}
