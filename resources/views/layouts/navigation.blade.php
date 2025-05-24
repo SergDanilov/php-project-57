@@ -100,18 +100,12 @@
                         </x-slot>
                     </x-dropdown>
             @auth
-
-                    <button class="inline-flex items-center px-0 py-0 border border-transparent text-sm leading-4 font-medium rounded-md text-white-500 bg-blue-500 hover:text-blue-700 focus:outline-none transition ease-in-out duration-150">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-nav-link :href="route('logout')" class="text-white hover:bg-blue-600 hover:text-white px-3 py-1"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Выход') }}
-                            </x-nav-link>
-                        </form>
+                <form method="POST" action="{{ route('logout') }}" class="inline-flex">
+                    @csrf
+                    <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none transition ease-in-out duration-150">
+                        {{ __('messages.exit') }}
                     </button>
-
+                </form>
             @endauth
                 @else
                     <!-- Для неавторизованных пользователей - кнопки входа и регистрации -->

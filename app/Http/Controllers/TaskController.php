@@ -50,8 +50,9 @@ class TaskController extends Controller
         $statuses = Status::all();
         $users = User::all();
         $labels = Label::all();
+        $task = new Task();
 
-        return view('tasks.create', compact('statuses', 'users', 'labels'));
+        return view('tasks.create', compact('statuses', 'users', 'labels', 'task'));
     }
 
     /**
@@ -63,11 +64,15 @@ class TaskController extends Controller
         $this->authorize('create', Task::class);
 
         $request->validate([
-            'name' => 'required|unique:tasks|max:255',
-            'description' => 'max:1024',
-            'status_id' => 'required|exists:statuses,id',
-            'assigned_to_id' => 'exists:users,id',
-        ]);
+                'name' => 'required|unique:tasks|max:255',
+                'description' => 'max:1024',
+                'status_id' => 'required|exists:statuses,id',
+                'assigned_to_id' => 'exists:users,id',
+            ], [
+                'name.required' => 'Это обязательное поле',
+                'name.unique' => 'Задача с таким именем уже существует',
+            ]
+        );
 
         $task = Task::create($request->all());
 

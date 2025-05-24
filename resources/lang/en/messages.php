@@ -49,6 +49,7 @@ return [
     'cancel' => 'Cancel',
     'apply__filters' => 'Go',
     'login' => 'Log in',
+    'exit' => 'Exit',
     'forgot__password' => 'Forgot your password?',
     'password' => 'Password',
     'register' => 'Register',
