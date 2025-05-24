@@ -116,7 +116,7 @@
                                                     @method('DELETE')
                                                     <button type="submit"
                                                             class="text-red-600 hover:text-red-900"
-                                                            onclick="return confirm('Are you sure?')">
+                                                            onclick="return confirm('Вы уверены?')">
                                                         {{ __('messages.delete') }}
                                                     </button>
                                                 </form>
