@@ -51,21 +51,37 @@
                                     <td class="px-6 py-2 whitespace-nowrap">
                                         {{ $label->created_at->format('d.m.Y') }}
                                     </td>
-                                    @auth
+                                    <!-- @auth
                                         <td class="px-6 py-2 whitespace-nowrap text-sm font-medium">
                                             <a href="{{ route('labels.edit', $label->id) }}"
-                                               class="text-yellow-600 hover:text-yellow-900 mr-3">{{ __('messages.edit') }}</a>
-                                                <form action="{{ route('labels.destroy', $label->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" data-confirm="Вы уверены?" data-method="delete"
-                                                            class="text-red-600 hover:text-red-900"
-                                                            onclick="return confirm('Вы уверены?')">
-                                                        {{ __('messages.delete') }}
-                                                    </button>
-                                                </form>
+                                               class="text-yellow-600 hover:text-yellow-900 mr-3">{{ __('messages.edit') }}
+                                            </a>
+                                            <form action="{{ route('labels.destroy', $label->id) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" data-confirm="Вы уверены?" data-method="delete"
+                                                        class="text-red-600 hover:text-red-900"
+                                                        onclick="return confirm('Вы уверены?')">
+                                                    {{ __('messages.delete') }}
+                                                </button>
+                                            </form>
                                         </td>
-                                    @endauth
+                                    @endauth -->
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium">
+                                        @auth
+                                            <a href="{{ route('labels.edit', $label->id) }}"
+                                            class="text-blue-600 hover:text-blue-900 mr-3">
+                                                {{ __('messages.edit') }}
+                                            </a>
+
+                                            <a href="{{ route('labels.destroy', $label->id) }}"
+                                            data-confirm="Вы уверены?"
+                                            data-method="delete"
+                                            class="text-red-600 hover:text-red-900">
+                                                {{ __('messages.delete') }}
+                                            </a>
+                                        @endauth
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
