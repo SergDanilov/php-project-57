@@ -35,9 +35,9 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.name') }}</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.description') }}</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.create') }}</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-right">{{ __('messages.create') }}</th>
                                 @auth
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.actions') }}</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-right">{{ __('messages.actions') }}</th>
                                 @endauth
                             </tr>
                         </thead>
@@ -48,7 +48,7 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500"> {{ $label->name }}</td>
 
                                     <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">{{ $label->description }}</td>
-                                    <td class="px-6 py-2 whitespace-nowrap">
+                                    <td class="px-6 py-2 whitespace-nowrap text-right">
                                         {{ $label->created_at->format('d.m.Y') }}
                                     </td>
                                     <!-- @auth
@@ -67,8 +67,9 @@
                                             </form>
                                         </td>
                                     @endauth -->
-                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium">
-                                        @auth
+                                    @auth
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium flex justify-end">
+                                        <div class="flex space-x-3">
                                             <a href="{{ route('labels.edit', $label->id) }}"
                                             class="text-blue-600 hover:text-blue-900 mr-3">
                                                 {{ __('messages.edit') }}
@@ -80,8 +81,9 @@
                                             class="text-red-600 hover:text-red-900">
                                                 {{ __('messages.delete') }}
                                             </a>
-                                        @endauth
+                                        </div>
                                     </td>
+                                    @endauth
                                 </tr>
                             @endforeach
                         </tbody>

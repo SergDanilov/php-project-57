@@ -49,19 +49,19 @@
                                         {{ $status->created_at->format('d.m.Y') }}
                                     </td>
                                     @auth
-                                        <td class="px-6 py-2 whitespace-nowrap text-sm font-medium">
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium">
                                             <a href="{{ route('task_statuses.edit', $status->id) }}"
-                                               class="text-yellow-600 hover:text-yellow-900 mr-3">{{ __('messages.edit') }}</a>
-                                            <form action="{{ route('task_statuses.destroy', $status->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        class="text-red-600 hover:text-red-900"
-                                                        onclick="return confirm('Вы уверены?')">
-                                                    {{ __('messages.delete') }}
-                                                </button>
-                                            </form>
-                                        </td>
+                                            class="text-blue-600 hover:text-blue-900 mr-3">
+                                                {{ __('messages.edit') }}
+                                            </a>
+
+                                            <a href="{{ route('task_statuses.destroy', $status->id) }}"
+                                            data-confirm="Вы уверены?"
+                                            data-method="delete"
+                                            class="text-red-600 hover:text-red-900">
+                                                {{ __('messages.delete') }}
+                                            </a>
+                                    </td>
                                     @endauth
                                 </tr>
                             @endforeach
