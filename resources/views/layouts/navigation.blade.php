@@ -99,14 +99,27 @@
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
-            @auth
+            <!-- @auth
                 <form id="logout-form" method="POST" action="{{ route('logout') }}" class="inline-flex">
                     @csrf
                     <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none transition ease-in-out duration-150">
                         {{ __('messages.exit') }}
                     </button>
                 </form>
-            @endauth
+            @endauth -->
+            <div class="flex items-center lg:order-2">
+                @auth
+                    <a href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
+                        {{ __('messages.exit') }}
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                        @csrf
+                    </form>
+                @endauth
+            </div>
                 @else
                     <!-- Для неавторизованных пользователей - кнопки входа и регистрации -->
                     <div class="flex space-x-4">

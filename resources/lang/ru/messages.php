@@ -12,7 +12,7 @@ return [
     'create__status' => 'Создать статус',
     'status__created' => 'Статус успешно создан',
     'status__updated' => 'Статус успешно изменён',
-    'status__deleted' => 'Статус успешно удален',
+    'status__deleted' => 'Статус успешно удалён',
     'status__cannot__be__deleted' => 'Не удалось удалить статус',
     'label__cannot__be__deleted' => 'Не удалось удалить метку',
     'tasks' => 'Задачи',
