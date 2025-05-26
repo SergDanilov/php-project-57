@@ -99,14 +99,6 @@
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
-            <!-- @auth
-                <form id="logout-form" method="POST" action="{{ route('logout') }}" class="inline-flex">
-                    @csrf
-                    <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none transition ease-in-out duration-150">
-                        {{ __('messages.exit') }}
-                    </button>
-                </form>
-            @endauth -->
             <div class="flex items-center lg:order-2">
                 @auth
                     <a href="{{ route('logout') }}"

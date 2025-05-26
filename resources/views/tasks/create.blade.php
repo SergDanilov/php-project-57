@@ -71,7 +71,7 @@
                             </div>
 
                             <!-- Скрытое поле для created_by_id -->
-                            <input type="hidden" name="created_by_id" value="{{ auth()->id() }}">
+                            <!-- <input type="hidden" name="created_by_id" value="{{ auth()->id() }}"> -->
                         </div>
                     @can('create', $task)
                         <div class="flex items-center justify-between">

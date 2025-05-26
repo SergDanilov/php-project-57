@@ -8,6 +8,7 @@ use App\Models\Label;
 use App\Models\User;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
@@ -58,31 +59,63 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+
+    //     $this->authorize('create', Task::class);
+
+    //     $request->validate([
+    //             'name' => 'required|unique:tasks|max:255',
+    //             'description' => 'max:1024',
+    //             'status_id' => 'required|exists:statuses,id',
+    //             'assigned_to_id' => 'exists:users,id',
+    //         ], [
+    //             'name.required' => 'Это обязательное поле',
+    //             'name.unique' => 'Задача с таким именем уже существует',
+    //         ]
+    //     );
+
+    //     $task = Task::create($request->all());
+
+    //     // Привязка меток к задаче
+    //     if ($request->has('labels')) {
+    //         $task->labels()->attach($request->input('labels'));
+    //     }
+
+    //     return redirect()->route('tasks.index')
+    //         ->with('success', __('messages.task__created'));
+    // }
     public function store(Request $request)
     {
+    $this->authorize('create', Task::class);
 
-        $this->authorize('create', Task::class);
+    $validatedData = $request->validate([
+        'name' => 'required|unique:tasks|max:255',
+        'description' => 'nullable|max:1024',
+        'status_id' => 'required|exists:statuses,id',
+        'assigned_to_id' => 'nullable|exists:users,id',
+    ], [
+        'name.required' => 'Это обязательное поле',
+        'name.unique' => 'Задача с таким именем уже существует',
+    ]);
 
-        $request->validate([
-                'name' => 'required|unique:tasks|max:255',
-                'description' => 'max:1024',
-                'status_id' => 'required|exists:statuses,id',
-                'assigned_to_id' => 'exists:users,id',
-            ], [
-                'name.required' => 'Это обязательное поле',
-                'name.unique' => 'Задача с таким именем уже существует',
-            ]
-        );
+    // Добавляем текущего пользователя как создателя задачи
+    $validatedData['created_by_id'] = Auth::id();
 
-        $task = Task::create($request->all());
+    // Создаем задачу с проверенными данными
+    $task = Task::create($validatedData);
 
-        // Привязка меток к задаче
-        if ($request->has('labels')) {
-            $task->labels()->attach($request->input('labels'));
-        }
+    // Привязка меток к задаче с валидацией
+    if ($request->has('labels')) {
+        $validatedLabels = $request->validate([
+            'labels' => 'array',
+            'labels.*' => 'exists:labels,id'
+        ]);
+        $task->labels()->attach($validatedLabels['labels']);
+    }
 
-        return redirect()->route('tasks.index')
-            ->with('success', __('messages.task__created'));
+    return redirect()->route('tasks.index')
+        ->with('success', __('messages.task__created'));
     }
 
     /**
