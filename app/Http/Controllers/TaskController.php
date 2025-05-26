@@ -59,32 +59,6 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(Request $request)
-    // {
-
-    //     $this->authorize('create', Task::class);
-
-    //     $request->validate([
-    //             'name' => 'required|unique:tasks|max:255',
-    //             'description' => 'max:1024',
-    //             'status_id' => 'required|exists:statuses,id',
-    //             'assigned_to_id' => 'exists:users,id',
-    //         ], [
-    //             'name.required' => 'Это обязательное поле',
-    //             'name.unique' => 'Задача с таким именем уже существует',
-    //         ]
-    //     );
-
-    //     $task = Task::create($request->all());
-
-    //     // Привязка меток к задаче
-    //     if ($request->has('labels')) {
-    //         $task->labels()->attach($request->input('labels'));
-    //     }
-
-    //     return redirect()->route('tasks.index')
-    //         ->with('success', __('messages.task__created'));
-    // }
     public function store(Request $request)
     {
     $this->authorize('create', Task::class);
@@ -178,6 +152,6 @@ class TaskController extends Controller
         $task->delete();
 
         return redirect()->route('tasks.index')
-        ->with('success', __('messages.task_deleted'));
+        ->with('success', __('messages.task__deleted'));
     }
 }

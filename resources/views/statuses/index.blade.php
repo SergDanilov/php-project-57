@@ -34,7 +34,7 @@
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.name') }}</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.create') }}</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-right">{{ __('messages.create__date') }}</th>
                                 @auth
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.actions') }}</th>
                                 @endauth
@@ -45,7 +45,7 @@
                                 <tr>
                                     <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">{{ $status->id }}</td>
                                     <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">{{ $status->name }}</td>
-                                    <td class="px-6 py-2 whitespace-nowrap">
+                                    <td class="px-6 py-2 whitespace-nowrap text-right">
                                         {{ $status->created_at->format('d.m.Y') }}
                                     </td>
                                     @auth

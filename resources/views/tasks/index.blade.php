@@ -84,7 +84,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.name') }}</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.author') }}</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.executor') }}</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.create') }}</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.create__date') }}</th>
                                 @auth
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('messages.actions') }}</th>
                                 @endauth
@@ -109,9 +109,8 @@
                                                 <a href="{{ route('tasks.edit', $task->id) }}"
                                                 class="text-yellow-600 hover:text-yellow-900 mr-3">{{ __('messages.edit') }}
                                                 </a>
-
                                             @if(auth()->id() === $task->created_by_id)
-                                                <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="inline">
+                                                <!-- <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"
@@ -119,7 +118,13 @@
                                                             onclick="return confirm('Вы уверены?')">
                                                         {{ __('messages.delete') }}
                                                     </button>
-                                                </form>
+                                                </form> -->
+                                                <a href="{{ route('tasks.destroy', $task->id) }}"
+                                                    data-confirm="Вы уверены?"
+                                                    data-method="delete"
+                                                    class="text-red-600 hover:text-red-900">
+                                                        {{ __('messages.delete') }}
+                                                </a>
                                             @endif
                                         </td>
                                     @endcan
