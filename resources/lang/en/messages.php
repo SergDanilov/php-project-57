@@ -47,6 +47,7 @@ return [
     'update' => 'Update',
     'delete' => 'Delete',
     'cancel' => 'Cancel',
+    'create' => 'Create',
     'apply__filters' => 'Go',
     'login' => 'Log in',
     'exit' => 'Exit',
