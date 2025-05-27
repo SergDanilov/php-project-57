@@ -61,35 +61,35 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-    $this->authorize('create', Task::class);
+        $this->authorize('create', Task::class);
 
-    $validatedData = $request->validate([
-        'name' => 'required|unique:tasks|max:255',
-        'description' => 'nullable|max:1024',
-        'status_id' => 'required|exists:statuses,id',
-        'assigned_to_id' => 'nullable|exists:users,id',
-    ], [
-        'name.required' => 'Это обязательное поле',
-        'name.unique' => 'Задача с таким именем уже существует',
-        'status_id.required' => 'Это обязательное поле',
-    ]);
-
-    // Добавляем текущего пользователя как создателя задачи
-    $validatedData['created_by_id'] = Auth::id();
-
-    // Создаем задачу с проверенными данными
-    $task = Task::create($validatedData);
-
-    // Привязка меток к задаче с валидацией
-    if ($request->has('labels')) {
-        $validatedLabels = $request->validate([
-            'labels' => 'array',
-            'labels.*' => 'exists:labels,id'
+        $validatedData = $request->validate([
+            'name' => 'required|unique:tasks|max:255',
+            'description' => 'nullable|max:1024',
+            'status_id' => 'required|exists:statuses,id',
+            'assigned_to_id' => 'nullable|exists:users,id',
+        ], [
+            'name.required' => 'Это обязательное поле',
+            'name.unique' => 'Задача с таким именем уже существует',
+            'status_id.required' => 'Это обязательное поле',
         ]);
-        $task->labels()->attach($validatedLabels['labels']);
-    }
 
-    return redirect()->route('tasks.index')
+        // Добавляем текущего пользователя как создателя задачи
+        $validatedData['created_by_id'] = Auth::id();
+
+        // Создаем задачу с проверенными данными
+        $task = Task::create($validatedData);
+
+        // Привязка меток к задаче с валидацией
+        if ($request->has('labels')) {
+            $validatedLabels = $request->validate([
+                'labels' => 'array',
+                'labels.*' => 'exists:labels,id'
+            ]);
+            $task->labels()->attach($validatedLabels['labels']);
+        }
+
+        return redirect()->route('tasks.index')
         ->with('success', __('messages.task__created'));
     }
 

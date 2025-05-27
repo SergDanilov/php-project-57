@@ -25,7 +25,7 @@ class LabelControllerTest extends TestCase
     }
 
     #[Test]
-    public function authenticated_user_can_access_create_form()
+    public function authenticatedUserCanAccessCreateForm()
     {
         $response = $this->actingAs($this->user)
             ->get(route('labels.create'));
@@ -35,7 +35,7 @@ class LabelControllerTest extends TestCase
     }
 
     #[Test]
-    public function guest_cannot_access_create_form()
+    public function guestCannotAccessCreateForm()
     {
         $response = $this->get(route('labels.create'));
 
@@ -43,7 +43,7 @@ class LabelControllerTest extends TestCase
     }
 
     #[Test]
-    public function authenticated_user_can_create_label()
+    public function authenticatedUserCanCreateLabel()
     {
         $labelData = ['name' => 'Новая метка'];
 
@@ -57,7 +57,7 @@ class LabelControllerTest extends TestCase
     }
 
     #[Test]
-    public function label_creation_requires_name()
+    public function labelCreationRequiresName()
     {
         $response = $this->actingAs($this->user)
             ->post(route('labels.store'), ['name' => '']);
@@ -66,7 +66,7 @@ class LabelControllerTest extends TestCase
     }
 
         #[Test]
-        public function label_name_must_be_unique()
+        public function labelNameMustBeUnique()
         {
                 DB::beginTransaction();
 
@@ -83,7 +83,7 @@ class LabelControllerTest extends TestCase
         }
 
     #[Test]
-    public function label_name_has_max_64_chars()
+    public function labelNameHasMax64Chars()
     {
         $response = $this->actingAs($this->user)
             ->post(route('labels.store'), [
@@ -94,7 +94,7 @@ class LabelControllerTest extends TestCase
     }
 
     #[Test]
-    public function guest_cannot_create_label()
+    public function guestCannotCreateLabel()
     {
         $response = $this->post(route('labels.store'), [
             'name' => 'Гостевой статус'
@@ -105,8 +105,8 @@ class LabelControllerTest extends TestCase
 
 
     #[Test]
-        public function cannot_delete_label_attached_to_task()
-        {
+    public function cannotDeleteLabelAttachedToTask()
+    {
         // Создаем метку и задачу
         $label = Label::factory()->create();
         $task = Task::factory()->create(['created_by_id' => $this->user->id]);
@@ -127,5 +127,5 @@ class LabelControllerTest extends TestCase
                 'task_id' => $task->id,
                 'label_id' => $label->id
         ]);
-        }
+    }
 }

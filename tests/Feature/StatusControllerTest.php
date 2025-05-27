@@ -21,7 +21,7 @@ class StatusControllerTest extends TestCase
     }
 
     #[Test]
-    public function authenticated_user_can_access_create_form()
+    public function authenticatedUserCanAccessCreateForm()
     {
         $response = $this->actingAs($this->user)
             ->get(route('task_statuses.create'));
@@ -31,7 +31,7 @@ class StatusControllerTest extends TestCase
     }
 
     #[Test]
-    public function guest_cannot_access_create_form()
+    public function guestCannotAccessCreateForm()
     {
         $response = $this->get(route('task_statuses.create'));
 
@@ -39,7 +39,7 @@ class StatusControllerTest extends TestCase
     }
 
     #[Test]
-    public function authenticated_user_can_create_status()
+    public function authenticatedUserCanCreateStatus()
     {
         $statusData = ['name' => 'Новый статус'];
 
@@ -53,7 +53,7 @@ class StatusControllerTest extends TestCase
     }
 
     #[Test]
-    public function status_creation_requires_name()
+    public function statusCreationRequiresName()
     {
         $response = $this->actingAs($this->user)
             ->post(route('task_statuses.store'), ['name' => '']);
@@ -62,7 +62,7 @@ class StatusControllerTest extends TestCase
     }
 
     #[Test]
-    public function status_name_must_be_unique()
+    public function statusNameMustBeUnique()
     {
         Status::factory()->create(['name' => 'Дубликат']);
 
@@ -73,7 +73,7 @@ class StatusControllerTest extends TestCase
     }
 
     #[Test]
-    public function status_name_has_max_255_chars()
+    public function statusNameHasMax255Chars()
     {
         $response = $this->actingAs($this->user)
             ->post(route('task_statuses.store'), [
@@ -84,7 +84,7 @@ class StatusControllerTest extends TestCase
     }
 
     #[Test]
-    public function guest_cannot_create_status()
+    public function guestCannotCreateStatus()
     {
         $response = $this->post(route('task_statuses.store'), [
             'name' => 'Гостевой статус'

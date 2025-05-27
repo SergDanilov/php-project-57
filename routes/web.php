@@ -7,7 +7,6 @@ use App\Http\Controllers\LabelController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
-
 Route::get('/locale/{locale}', function ($locale) {
     if (!in_array($locale, ['en', 'ru'])) {
         abort(400);
@@ -69,7 +68,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Главная страница
 Route::get('/', function () {
         return view('dashboard');
-    })->name('dashboard');
+})->name('dashboard');
 
 Route::controller(StatusController::class)->group(function () {
     Route::get('/task_statuses', 'index')->name('task_statuses.index');

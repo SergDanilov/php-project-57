@@ -37,8 +37,7 @@ class StatusController extends Controller
             ], [
                 'name.required' => 'Это обязательное поле',
                 'name.unique' => 'Статус с таким именем уже существует',
-            ]
-        );
+            ]);
 
         Status::create($request->all());
 

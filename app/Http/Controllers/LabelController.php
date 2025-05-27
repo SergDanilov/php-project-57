@@ -35,8 +35,7 @@ class LabelController extends Controller
             ], [
                 'name.required' => 'Это обязательное поле',
                 'name.unique' => 'Метка с таким именем уже существует',
-            ]
-        );
+            ]);
 
         Label::create($request->all());
 
