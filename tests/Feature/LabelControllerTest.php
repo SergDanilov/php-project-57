@@ -65,22 +65,22 @@ class LabelControllerTest extends TestCase
         $response->assertSessionHasErrors(['name']);
     }
 
-        #[Test]
-        public function labelNameMustBeUnique()
-        {
-                DB::beginTransaction();
+    #[Test]
+    public function labelNameMustBeUnique()
+    {
+        DB::beginTransaction();
 
-                try {
-                        Label::factory()->create(['name' => 'Дубль']);
+        try {
+            Label::factory()->create(['name' => 'Дубль']);
 
-                        $response = $this->actingAs($this->user)
+            $response = $this->actingAs($this->user)
                         ->post(route('labels.store'), ['name' => 'Дубль']);
 
-                        $response->assertSessionHasErrors(['name']);
-                } finally {
-                        DB::rollBack();
-                }
-        }
+            $response->assertSessionHasErrors(['name']);
+            } finally {
+                DB::rollBack();
+            }
+    }
 
     #[Test]
     public function labelNameHasMax64Chars()
