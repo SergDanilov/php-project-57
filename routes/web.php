@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/locale/{locale}', function ($locale) {
-    if (!in_array($locale, ['en', 'ru'])) {
+    if (!in_array($locale, ['en', 'ru', true])) {
         abort(400);
     }
 
