@@ -110,15 +110,6 @@
                                                 class="text-yellow-600 hover:text-yellow-900 mr-3">{{ __('messages.edit') }}
                                                 </a>
                                             @if(auth()->id() === $task->created_by_id)
-                                                <!-- <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                            class="text-red-600 hover:text-red-900"
-                                                            onclick="return confirm('Вы уверены?')">
-                                                        {{ __('messages.delete') }}
-                                                    </button>
-                                                </form> -->
                                                 <a href="{{ route('tasks.destroy', $task->id) }}"
                                                     data-confirm="Вы уверены?"
                                                     data-method="delete"
