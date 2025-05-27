@@ -3,16 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class Task extends Model
 {
     use HasFactory;
-    use \Spatie\QueryBuilder\QueryBuilder;
-    use \Spatie\QueryBuilder\AllowedFilter;
 
     protected $fillable = [
         'name',

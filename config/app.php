@@ -117,6 +117,9 @@ return [
     | Supported drivers: "file", "cache"
     |
     */
+    'providers' => [
+        Spatie\QueryBuilder\QueryBuilderServiceProvider::class,
+    ],
 
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
