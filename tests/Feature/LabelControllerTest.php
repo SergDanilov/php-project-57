@@ -77,9 +77,9 @@ class LabelControllerTest extends TestCase
                         ->post(route('labels.store'), ['name' => 'Дубль']);
 
             $response->assertSessionHasErrors(['name']);
-            } finally {
+        } finally {
                 DB::rollBack();
-            }
+        }
     }
 
     #[Test]
