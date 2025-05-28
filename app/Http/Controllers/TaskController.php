@@ -43,36 +43,36 @@ class TaskController extends Controller
 
     public function index()
     {
-    /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\Task> $query */
-    $query = Task::query();
+        /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\Task> $query */
+        $query = Task::query();
 
-    /** @var \Spatie\QueryBuilder\QueryBuilder<\App\Models\Task> $queryBuilder */
-    $queryBuilder = QueryBuilder::for($query)
-        ->with(['status', 'creator', 'assignee', 'labels']);
+        /** @var \Spatie\QueryBuilder\QueryBuilder<\App\Models\Task> $queryBuilder */
+        $queryBuilder = QueryBuilder::for($query)
+            ->with(['status', 'creator', 'assignee', 'labels']);
 
-    /** @var \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\Task> $tasks */
-    $tasks = $queryBuilder
-        ->allowedFilters([
-            AllowedFilter::exact('status_id'),
-            AllowedFilter::exact('created_by_id', 'creator.id'),
-            AllowedFilter::exact('assigned_to_id', 'assignee.id'),
-            AllowedFilter::exact('labels.id'),
-            AllowedFilter::partial('name'),
-        ])
-        ->allowedSorts(['created_at', 'name'])
-        ->defaultSort('-created_at')
-        ->paginate(10);
+        /** @var \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\Task> $tasks */
+        $tasks = $queryBuilder
+            ->allowedFilters([
+                AllowedFilter::exact('status_id'),
+                AllowedFilter::exact('created_by_id', 'creator.id'),
+                AllowedFilter::exact('assigned_to_id', 'assignee.id'),
+                AllowedFilter::exact('labels.id'),
+                AllowedFilter::partial('name'),
+            ])
+            ->allowedSorts(['created_at', 'name'])
+            ->defaultSort('-created_at')
+            ->paginate(10);
 
-    /** @var \Illuminate\Support\Collection<int, string> $statuses */
-    $statuses = Status::pluck('name', 'id');
+        /** @var \Illuminate\Support\Collection<int, string> $statuses */
+        $statuses = Status::pluck('name', 'id');
 
-    /** @var \Illuminate\Support\Collection<int, string> $users */
-    $users = User::pluck('name', 'id');
+        /** @var \Illuminate\Support\Collection<int, string> $users */
+        $users = User::pluck('name', 'id');
 
-    /** @var \Illuminate\Support\Collection<int, string> $labels */
-    $labels = Label::pluck('name', 'id');
+        /** @var \Illuminate\Support\Collection<int, string> $labels */
+        $labels = Label::pluck('name', 'id');
 
-    return view('tasks.index', compact('tasks', 'statuses', 'users', 'labels'));
+        return view('tasks.index', compact('tasks', 'statuses', 'users', 'labels'));
     }
 
     /**
