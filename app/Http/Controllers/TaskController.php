@@ -46,7 +46,6 @@ class TaskController extends Controller
         /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\Task> $query */
         $query = Task::query();
 
-        /** @var \Spatie\QueryBuilder\QueryBuilder<\App\Models\Task> $queryBuilder */
         $queryBuilder = QueryBuilder::for($query)
             ->with(['status', 'creator', 'assignee', 'labels']);
 
