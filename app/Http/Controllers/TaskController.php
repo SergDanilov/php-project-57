@@ -63,13 +63,8 @@ class TaskController extends Controller
             ->defaultSort('-created_at')
             ->paginate(10);
 
-        /** @var \Illuminate\Support\Collection<int, string> $statuses */
         $statuses = Status::pluck('name', 'id');
-
-        /** @var \Illuminate\Support\Collection<int, string> $users */
         $users = User::pluck('name', 'id');
-
-        /** @var \Illuminate\Support\Collection<int, string> $labels */
         $labels = Label::pluck('name', 'id');
 
         return view('tasks.index', compact('tasks', 'statuses', 'users', 'labels'));
