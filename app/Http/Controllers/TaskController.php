@@ -19,10 +19,39 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index()
+    // {
+    //     $tasks = QueryBuilder::for(Task::query())
+    //         ->with(['status', 'creator', 'assignee', 'labels'])
+    //         ->allowedFilters([
+    //             AllowedFilter::exact('status_id'),
+    //             AllowedFilter::exact('created_by_id', 'creator.id'),
+    //             AllowedFilter::exact('assigned_to_id', 'assignee.id'),
+    //             AllowedFilter::exact('labels.id'),
+    //             AllowedFilter::partial('name'),
+    //         ])
+    //         ->allowedSorts(['created_at', 'name'])
+    //         ->defaultSort('-created_at')
+    //         ->paginate(10);
+
+    //     $statuses = Status::pluck('name', 'id');
+    //     $users = User::pluck('name', 'id');
+    //     $labels = Label::pluck('name', 'id');
+
+    //     return view('tasks.index', compact('tasks', 'statuses', 'users', 'labels'));
+    // }
+
     public function index()
     {
-        $tasks = QueryBuilder::for(Task::query())
-            ->with(['status', 'creator', 'assignee', 'labels'])
+        /** @var \Illuminate\Database\Eloquent\Builder<Task> $query */
+        $query = Task::query();
+
+        /** @var \Spatie\QueryBuilder\QueryBuilder<Task> $queryBuilder */
+        $queryBuilder = QueryBuilder::for($query)
+            ->with(['status', 'creator', 'assignee', 'labels']);
+
+        /** @var \Illuminate\Contracts\Pagination\LengthAwarePaginator<Task> $tasks */
+        $tasks = $queryBuilder
             ->allowedFilters([
                 AllowedFilter::exact('status_id'),
                 AllowedFilter::exact('created_by_id', 'creator.id'),
@@ -34,8 +63,13 @@ class TaskController extends Controller
             ->defaultSort('-created_at')
             ->paginate(10);
 
+        /** @var \Illuminate\Support\Collection<int, string> $statuses */
         $statuses = Status::pluck('name', 'id');
+
+        /** @var \Illuminate\Support\Collection<int, string> $users */
         $users = User::pluck('name', 'id');
+
+        /** @var \Illuminate\Support\Collection<int, string> $labels */
         $labels = Label::pluck('name', 'id');
 
         return view('tasks.index', compact('tasks', 'statuses', 'users', 'labels'));
