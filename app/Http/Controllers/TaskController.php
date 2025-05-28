@@ -43,13 +43,13 @@ class TaskController extends Controller
 
     public function index()
     {
-        /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\Task> $query */
+
         $query = Task::query();
 
         $queryBuilder = QueryBuilder::for($query)
             ->with(['status', 'creator', 'assignee', 'labels']);
 
-        /** @var \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\Task> $tasks */
+        /** @var \App\Models\Task $tasks */
         $tasks = $queryBuilder
             ->allowedFilters([
                 AllowedFilter::exact('status_id'),
