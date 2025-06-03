@@ -1,8 +1,0 @@
-[0;1;32m●[0m postgresql.service - PostgreSQL RDBMS
-     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
-     Active: [0;1;32mactive (exited)[0m since Sat 2025-04-12 11:36:57 UTC; 40min ago
-    Process: 774 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
-   Main PID: 774 (code=exited, status=0/SUCCESS)
-
-Apr 12 11:36:57 ubuntu-focal systemd[1]: Starting PostgreSQL RDBMS...
-Apr 12 11:36:57 ubuntu-focal systemd[1]: Finished PostgreSQL RDBMS.
