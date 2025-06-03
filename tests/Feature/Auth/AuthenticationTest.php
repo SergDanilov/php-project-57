@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
-
     public function testLoginScreenCanBeRendered(): void
     {
         $response = $this->get('/login');

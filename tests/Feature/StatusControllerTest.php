@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class StatusControllerTest extends TestCase
 {
-
     protected User $user;
     protected Status $status;
     protected array $statusData;
@@ -62,7 +61,7 @@ class StatusControllerTest extends TestCase
             ->assertSessionDoesntHaveErrors()
             ->assertSessionHas('success');
 
-        $this->assertDatabaseHas('statuses',  $this->statusData);
+        $this->assertDatabaseHas('statuses', $this->statusData);
     }
 
     public function testStatusCreationRequiresName()

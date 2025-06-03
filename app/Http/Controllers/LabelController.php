@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class LabelController extends Controller
 {
+
     use AuthorizesRequests;
     /**
      * Display a listing of the resource.
@@ -89,7 +90,7 @@ class LabelController extends Controller
         $this->authorize('delete', $label);
 
         if ($label->tasks()->exists()) {
-        return redirect()
+            return redirect()
             ->route('labels.index')
             ->with('error', __('messages.label__cannot__be__deleted'))
             ->setStatusCode(403);

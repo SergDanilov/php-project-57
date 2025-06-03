@@ -6,7 +6,6 @@ use Tests\TestCase;
 
 class RegistrationTest extends TestCase
 {
-
     public function testRegistrationScreenCanBeRendered(): void
     {
         $response = $this->get('/register');

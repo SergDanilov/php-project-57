@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class PasswordConfirmationTest extends TestCase
 {
-
     public function testConfirmPasswordScreenCanBeRendered(): void
     {
         $user = User::factory()->create();
