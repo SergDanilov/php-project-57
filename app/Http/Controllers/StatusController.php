@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Status;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class StatusController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -24,6 +27,7 @@ class StatusController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Status::class);
         return view('statuses.create');
     }
 
@@ -32,6 +36,7 @@ class StatusController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Status::class);
         $request->validate([
             'name' => 'required|unique:statuses|max:255',
             ], [
@@ -58,6 +63,7 @@ class StatusController extends Controller
      */
     public function edit(Status $task_status)
     {
+        $this->authorize('update', $task_status);
         return view('statuses.edit', compact('task_status'));
     }
 
@@ -66,6 +72,7 @@ class StatusController extends Controller
      */
     public function update(Request $request, Status $task_status)
     {
+        $this->authorize('update', $task_status);
         $request->validate([
             'name' => 'required|unique:statuses,name,' . $task_status->id . '|max:255',
         ]);
@@ -81,21 +88,13 @@ class StatusController extends Controller
      */
     public function destroy(Status $task_status)
     {
-        try {
-            // Проверяем, есть ли связанные задачи
-            if ($task_status->tasks()->exists()) {
-                return redirect()->route('task_statuses.index')
-                    ->with('error', __('messages.status__cannot__be__deleted'));
-            }
+        $this->authorize('delete', $task_status);
 
-            $task_status->delete();
-
-            return redirect()->route('task_statuses.index')
-                ->with('success', __('messages.status__deleted'));
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Дополнительная проверка на случай, если проверка выше не сработала
-            return redirect()->route('task_statuses.index')
-                ->with('error', __('messages.status__cannot__be__deleted'));
+        if ($task_status->tasks()->exists()) {
+            return back()->with('error', __('messages.status__cannot__be__deleted'));
         }
+
+        $task_status->delete();
+        return redirect()->route('task_statuses.index')->with('success', __('messages.status__deleted'));
     }
 }

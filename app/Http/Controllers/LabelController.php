@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Label;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class LabelController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -22,6 +25,7 @@ class LabelController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Label::class);
         return view('labels.create');
     }
 
@@ -30,6 +34,7 @@ class LabelController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Label::class);
         $request->validate([
             'name' => 'required|unique:labels|max:64',
             ], [
@@ -56,6 +61,7 @@ class LabelController extends Controller
      */
     public function edit(Label $label)
     {
+        $this->authorize('update', $label);
         return view('labels.edit', compact('label'));
     }
 
@@ -64,6 +70,7 @@ class LabelController extends Controller
      */
     public function update(Request $request, Label $label)
     {
+        $this->authorize('update', $label);
         $request->validate([
             'name' => 'required|unique:statuses,name,' . $label->id . '|max:64',
         ]);
@@ -79,25 +86,18 @@ class LabelController extends Controller
      */
     public function destroy(Label $label)
     {
-        try {
-            // Проверяем, есть ли связанные задачи
-            if ($label->tasks()->exists()) {
-                return redirect()
-                    ->route('labels.index')
-                    ->with('error', __('messages.label__cannot__be__deleted'))
-                    ->setStatusCode(403);
-            }
+        $this->authorize('delete', $label);
 
-            $label->delete();
-
-            return redirect()->route('labels.index')
-                ->with('success', __('messages.label__deleted'));
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Дополнительная проверка на случай, если проверка выше не сработала
-            return redirect()
-                ->route('labels.index')
-                ->with('error', __('messages.label__cannot__be__deleted'))
-                ->setStatusCode(403);
+        if ($label->tasks()->exists()) {
+        return redirect()
+            ->route('labels.index')
+            ->with('error', __('messages.label__cannot__be__deleted'))
+            ->setStatusCode(403);
         }
+
+
+        $label->delete();
+        return redirect()->route('labels.index')
+            ->with('success', __('messages.label__deleted'));
     }
 }
