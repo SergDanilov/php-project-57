@@ -3,12 +3,10 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PasswordConfirmationTest extends TestCase
 {
-    use RefreshDatabase;
 
     public function testConfirmPasswordScreenCanBeRendered(): void
     {
@@ -16,7 +14,7 @@ class PasswordConfirmationTest extends TestCase
 
         $response = $this->actingAs($user)->get('/confirm-password');
 
-        $response->assertStatus(200);
+        $response->assertOk();
     }
 
     public function testPasswordCanBeConfirmed(): void

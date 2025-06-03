@@ -4,56 +4,68 @@ namespace Tests\Feature;
 
 use App\Models\Status;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class StatusControllerTest extends TestCase
 {
-    use RefreshDatabase;
 
     protected User $user;
+    protected Status $status;
+    protected array $statusData;
+    protected array $duplicateStatusData;
+    protected array $longNameData;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::factory()->create();
+
+        // Создаем статус с тем же именем, что и в duplicateStatusData
+        $this->duplicateStatusData = ['name' => 'Дубликат'];
+        $this->status = Status::factory()->create(['name' => $this->duplicateStatusData['name']]);
+
+        // Основные тестовые данные
+        $this->statusData = [
+            'name' => 'Тестовый статус'
+        ];
+
+        // Данные для проверки длины
+        $this->longNameData = [
+            'name' => str_repeat('a', 256)
+        ];
     }
 
-    #[Test]
-    public function authenticatedUserCanAccessCreateForm()
+    public function testAuthenticatedUserCanAccessCreateForm()
     {
         $response = $this->actingAs($this->user)
             ->get(route('task_statuses.create'));
 
-        $response->assertStatus(200)
+        $response->assertOk()
             ->assertViewIs('statuses.create');
     }
 
-    #[Test]
-    public function guestCannotAccessCreateForm()
+    public function testGuestCannotAccessCreateForm()
     {
         $response = $this->get(route('task_statuses.create'));
 
         $response->assertRedirect(route('login'));
     }
 
-    #[Test]
-    public function authenticatedUserCanCreateStatus()
+    public function testAuthenticatedUserCanCreateStatus()
     {
-        $statusData = ['name' => 'Новый статус'];
 
         $response = $this->actingAs($this->user)
-            ->post(route('task_statuses.store'), $statusData);
+            ->post(route('task_statuses.store'), $this->statusData);
 
         $response->assertRedirect(route('task_statuses.index'))
+            ->assertSessionDoesntHaveErrors()
             ->assertSessionHas('success');
 
-        $this->assertDatabaseHas('statuses', $statusData);
+        $this->assertDatabaseHas('statuses',  $this->statusData);
     }
 
-    #[Test]
-    public function statusCreationRequiresName()
+    public function testStatusCreationRequiresName()
     {
         $response = $this->actingAs($this->user)
             ->post(route('task_statuses.store'), ['name' => '']);
@@ -61,34 +73,25 @@ class StatusControllerTest extends TestCase
         $response->assertSessionHasErrors(['name']);
     }
 
-    #[Test]
-    public function statusNameMustBeUnique()
+    public function testStatusNameMustBeUnique()
     {
-        Status::factory()->create(['name' => 'Дубликат']);
-
         $response = $this->actingAs($this->user)
-            ->post(route('task_statuses.store'), ['name' => 'Дубликат']);
+            ->post(route('task_statuses.store'), $this->duplicateStatusData);
 
         $response->assertSessionHasErrors(['name']);
     }
 
-    #[Test]
-    public function statusNameHasMax255Chars()
+    public function testStatusNameHasMax255Chars()
     {
         $response = $this->actingAs($this->user)
-            ->post(route('task_statuses.store'), [
-                'name' => str_repeat('a', 256)
-            ]);
+            ->post(route('task_statuses.store'), $this->longNameData);
 
         $response->assertSessionHasErrors(['name']);
     }
 
-    #[Test]
-    public function guestCannotCreateStatus()
+    public function testGuestCannotCreateStatus()
     {
-        $response = $this->post(route('task_statuses.store'), [
-            'name' => 'Гостевой статус'
-        ]);
+        $response = $this->post(route('task_statuses.store'), $this->statusData);
 
         $response->assertRedirect(route('login'));
     }

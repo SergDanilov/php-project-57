@@ -5,113 +5,120 @@ namespace Tests\Feature;
 use App\Models\Task;
 use App\Models\Status;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class TaskControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     protected User $user;
+    protected User $assignee;
+    protected Status $status;
+    protected array $taskData;
+    protected array $duplicateTaskData;
+    protected array $longNameData;
 
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->user = User::factory()->create();
+        $this->assignee = User::factory()->create();
+        $this->status = Status::factory()->create();
+
+        // основные тестовые данные задачи
+        $this->taskData = [
+            'name' => 'Новая задача',
+            'status_id' => $this->status->id,
+            'assigned_to_id' => $this->assignee->id,
+            'created_by_id' => $this->user->id,
+        ];
+
+        // для проверки дублирования
+        $this->duplicateTaskData = [
+            'name' => 'Дубликат задачи',
+            'status_id' => $this->status->id,
+            'assigned_to_id' => $this->assignee->id,
+        ];
+
+        // для проверки длины имени
+        $this->longNameData = [
+            'name' => str_repeat('a', 256),
+            'status_id' => $this->status->id,
+            'assigned_to_id' => $this->assignee->id,
+        ];
+
+        // дубликат для теста уникальности
+        Task::factory()->create([
+            'name' => $this->duplicateTaskData['name'],
+            'status_id' => $this->status->id,
+            'assigned_to_id' => $this->assignee->id,
+            'created_by_id' => $this->user->id,
+        ]);
     }
 
-    #[Test]
-    public function authenticatedUserCanAccessCreateForm()
+    public function testAuthenticatedUserCanAccessCreateForm()
     {
         $response = $this->actingAs($this->user)
-        ->get(route('tasks.create'));
+            ->get(route('tasks.create'));
 
-        $response->assertStatus(200)
-        ->assertViewIs('tasks.create');
+        $response->assertOk()
+            ->assertViewIs('tasks.create');
     }
 
-    #[Test]
-    public function guestCannotAccessCreateForm()
+    public function testGuestCannotAccessCreateForm()
     {
         $response = $this->get(route('tasks.create'));
-
         $response->assertRedirect(route('login'));
     }
 
-    #[Test]
-    public function authenticatedUserCanCreateTask()
+    public function testAuthenticatedUserCanCreateTask()
     {
-        $status = Status::factory()->create();
-        $assignee = User::factory()->create();
-
-        $taskData = [
-                'name' => 'Новая задача',
-                'status_id' => $status->id,
-                'assigned_to_id' => $assignee->id,
-                'created_by_id' => $this->user->id,
-        ];
-
         $response = $this->actingAs($this->user)
-                ->post(route('tasks.store'), $taskData);
+            ->post(route('tasks.store'), $this->taskData);
 
         $response->assertRedirect(route('tasks.index'))
-                ->assertSessionHas('success');
+            ->assertSessionDoesntHaveErrors()
+            ->assertSessionHas('success');
 
-        $this->assertDatabaseHas('tasks', $taskData);
+        $this->assertDatabaseHas('tasks', $this->taskData);
     }
 
-    #[Test]
-    public function taskCreationRequiresName()
+    public function testTaskCreationRequiresName()
     {
         $response = $this->actingAs($this->user)
-        ->post(route('tasks.store'), ['name' => '']);
+            ->post(route('tasks.store'), [
+                'name' => '',
+                'status_id' => $this->status->id,
+                'assigned_to_id' => $this->assignee->id,
+            ]);
 
         $response->assertSessionHasErrors(['name']);
     }
 
-    #[Test]
-
-    public function taskNameMustBeUnique()
+    public function testTaskNameMustBeUnique()
     {
-        $status = Status::factory()->create();
-        $assignee = User::factory()->create();
-
-        Task::factory()->create([
-                'name' => 'Дубликат',
-                'status_id' => $status->id,
-                'assigned_to_id' => $assignee->id,
-                'created_by_id' => $this->user->id,
-        ]);
-
         $response = $this->actingAs($this->user)
-                ->post(route('tasks.store'), [
-                'name' => 'Дубликат',
-                'status_id' => $status->id,
-                'assigned_to_id' => $assignee->id,
-                ]);
+            ->post(route('tasks.store'), $this->duplicateTaskData);
 
         $response->assertSessionHasErrors(['name']);
     }
 
-    #[Test]
-
-    public function taskNameHasMax255Chars()
+    public function testTaskNameHasMax255Chars()
     {
         $response = $this->actingAs($this->user)
-        ->post(route('tasks.store'), [
-                'name' => str_repeat('a', 256)
-        ]);
+            ->post(route('tasks.store'), $this->longNameData);
 
         $response->assertSessionHasErrors(['name']);
     }
 
-    #[Test]
-
-    public function guestCannotCreateTask()
+    public function testGuestCannotCreateTask()
     {
         $response = $this->post(route('tasks.store'), [
-        'name' => 'Гостевая задача'
+            'name' => 'Гостевая задача',
+            'status_id' => $this->status->id,
+            'assigned_to_id' => $this->assignee->id,
         ]);
 
         $response->assertRedirect(route('login'));
