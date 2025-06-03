@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-
     use AuthorizesRequests;
 
     /**

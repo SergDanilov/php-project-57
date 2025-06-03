@@ -9,7 +9,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class LabelController extends Controller
 {
-
     use AuthorizesRequests;
     /**
      * Display a listing of the resource.
