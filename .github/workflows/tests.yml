@@ -1,74 +1,41 @@
-# name: Tests with SonarQube
+# Name of workflow
+name: PHP CI
 
+# Trigger the workflow on push or pull request
 on:
-  push:
-    branches:
-      - master
-      - '*.x'
-  pull_request:
-  schedule:
-    - cron: '0 0 * * *'
-
-env:
-  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Токен из настроек SonarQube
-  SONAR_HOST_URL: "https://sonarcloud.io"  # Для SonarCloud (или ваш URL для self-hosted)
+  - push
+  - pull_request
 
 jobs:
-  tests:
+  build:
+
+    # The type of machine to run the job on
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: true
-      matrix:
-        php: [8.2, 8.3, 8.4]
-
-    name: PHP ${{ matrix.php }} with SonarQube
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Необходимо для корректной работы SonarQube
-
-      - name: Setup PHP with PCOV
+        # Check-out repository under GitHub workspace
+        # https://github.com/actions/checkout
+      - uses: actions/checkout@v4
+        # Step's name
+      - name: Setup PHP
+        # Action gives to setup the PHP environment to test application
+        # https://github.com/shivammathur/setup-php
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, pcov
-          coverage: pcov  # Используем PCOV для coverage (быстрее Xdebug)
-          tools: composer:v2
+          # Specify the PHP version
+          php-version: '8.2'
+      - name: Install
+        # Install project
+        run: make install
+      - name: Run linter
+        # Run Linter
+        run: make lint
 
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
-
-      - name: Copy environment file
-        run: cp .env.example .env
-
-      - name: Generate app key
-        run: php artisan key:generate
-
-      - name: Run tests with coverage
-        run: |
-          mkdir -p coverage
-          php artisan test --coverage --coverage-clover=coverage.xml  # Генерируем отчет в формате Clover
+        # https://docs.sonarsource.com/sonarqube-cloud/enriching/test-coverage/php-test-coverage/
+      - name: Run tests
+        run: make test-coverage
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@master
-        with:
-          args: >
-            -Dsonar.php.coverage.reportPaths=coverage.xml
-            -Dsonar.projectKey=YOUR_PROJECT_KEY
-            -Dsonar.projectName="Your Laravel Project"
-            -Dsonar.php.version=${{ matrix.php }}
-            -Dsonar.exclusions=**/vendor/**,**/database/**,**/tests/**
-            -Dsonar.sourceEncoding=UTF-8
-            -Dsonar.host.url=${{ env.SONAR_HOST_URL }}
+        uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: coverage-report
-          path: coverage.xml

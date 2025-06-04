@@ -4,7 +4,7 @@ c:
 stop:
 	docker compose down
 
-setup:
+install:
 	composer install
 
 compose-bash:
@@ -18,3 +18,6 @@ compose-build:
 
 lint:
 	composer exec --verbose phpcs -- --standard=PSR12 app public resources routes
+
+test-coverage:
+    XDEBUG_MODE=coverage php artisan test --coverage-clover=build/logs/clover.xml
