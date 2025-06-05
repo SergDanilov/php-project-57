@@ -108,7 +108,7 @@ class LabelControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->delete(route('labels.destroy', $this->label->id));
 
-        $response->assertStatus(403)
+        $response->assertForbidden()
             ->assertSessionHas('error', __('messages.label__cannot__be__deleted'));
 
         $this->assertDatabaseHas('labels', ['id' => $this->label->id]);
