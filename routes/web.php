@@ -19,7 +19,7 @@ Route::get('/locale/{locale}', function ($locale) {
     return redirect()->back();
 })->name('setlocale');
 
-// Main page - open for all
+// Main page - open for all users
 Route::get('/', function () {
     return view('dashboard');
 })->name('dashboard');
