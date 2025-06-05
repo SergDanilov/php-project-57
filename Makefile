@@ -1,7 +1,23 @@
-c:
+setup:
+	composer install
+	cp -n .env.example .env
+	php artisan key:gen --ansi
+	touch database/database.sqlite
+	php artisan migrate
+	php artisan db:seed
+	npm ci
+	npm run build
+
+frontend-dev:
+	npm run	dev
+
+start:
+	php artisan serve
+
+docker:
 	docker compose up -d
 
-stop:
+stop-docker:
 	docker compose down
 
 install:
@@ -19,5 +35,8 @@ compose-build:
 lint:
 	composer exec --verbose phpcs -- --standard=PSR12 app public resources routes
 
+test:
+	php artisan test
+
 test-coverage:
-    XDEBUG_MODE=coverage php artisan test --coverage-clover=build/logs/clover.xml
+	XDEBUG_MODE=coverage php artisan test --coverage-clover=build/logs/clover.xml
