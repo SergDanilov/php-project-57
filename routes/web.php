@@ -7,7 +7,7 @@ use App\Http\Controllers\LabelController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
-// Смена локали
+// Locale
 Route::get('/locale/{locale}', function ($locale) {
     if (!in_array($locale, ['en', 'ru'], true)) {
         abort(400);
@@ -19,43 +19,43 @@ Route::get('/locale/{locale}', function ($locale) {
     return redirect()->back();
 })->name('setlocale');
 
-// Главная страница (доступна всем)
+// Main page - open for all
 Route::get('/', function () {
     return view('dashboard');
 })->name('dashboard');
 
 
-// Защищенные маршруты (только для авторизованных)
 Route::middleware(['auth', 'verified'])->group(function () {
     // Профиль (оставляем middleware, так как это стандартный функционал Laravel)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Ресурсные маршруты с автоматическими именами и защитой через Policy
-    Route::resource('task_statuses', StatusController::class)->only([
-        'create', 'store', 'edit', 'update', 'destroy'
-    ]);
-
-    Route::resource('tasks', TaskController::class)->only([
-        'create', 'store', 'edit', 'update', 'destroy'
-    ]);
-
-    Route::resource('labels', LabelController::class)->only([
-        'create', 'store', 'edit', 'update', 'destroy'
-    ]);
 });
 
-// Публичные маршруты (чтение)
-Route::controller(StatusController::class)->group(function () {
-    Route::get('/task_statuses', 'index')->name('task_statuses.index');
-    Route::get('/task_statuses/{status}', 'show')->name('task_statuses.show');
-});
+//Tasks routes
+Route::resource('tasks', TaskController::class)
+    ->except('index', 'show')
+    ->middleware(['auth', 'verified']);
 
 Route::controller(TaskController::class)->group(function () {
     Route::get('/tasks', 'index')->name('tasks.index');
     Route::get('/tasks/{task}', 'show')->name('tasks.show');
 });
+
+//Statuses routes
+Route::resource('task_statuses', StatusController::class)
+    ->except('index', 'show')
+    ->middleware(['auth', 'verified']);
+
+Route::controller(StatusController::class)->group(function () {
+    Route::get('/task_statuses', 'index')->name('task_statuses.index');
+    Route::get('/task_statuses/{status}', 'show')->name('task_statuses.show');
+});
+
+//Labels routes
+Route::resource('labels', LabelController::class)
+    ->except('index', 'show')
+    ->middleware(['auth', 'verified']);
 
 Route::controller(LabelController::class)->group(function () {
     Route::get('/labels', 'index')->name('labels.index');
