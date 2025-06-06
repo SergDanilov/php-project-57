@@ -35,8 +35,14 @@ compose-build:
 lint:
 	composer exec --verbose phpcs -- --standard=PSR12 app public resources routes
 
+setup-test-db:
+	mkdir -p database
+	touch database/database.sqlite
+	php artisan config:clear
+	php artisan migrate:fresh --env=testing
+
 test:
 	php artisan test
 
-test-coverage:
+test-coverage: setup-test-db
 	XDEBUG_MODE=coverage php artisan test --coverage-clover=build/logs/clover.xml

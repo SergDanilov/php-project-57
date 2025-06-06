@@ -24,6 +24,8 @@ jobs:
         with:
           # Specify the PHP version
           php-version: '8.2'
+          extensions: sqlite3  # Убедитесь, что расширение sqlite3 установлено
+          coverage: xdebug  # Для генерации покрытия кода
       - name: Install
         # Install project
         run: make install
