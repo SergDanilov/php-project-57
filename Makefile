@@ -39,6 +39,7 @@ setup-test-db:
 	mkdir -p database
 	touch database/database.sqlite
 	php artisan config:clear
+	php artisan key:generate
 	php artisan migrate:fresh --env=testing
 
 test:
