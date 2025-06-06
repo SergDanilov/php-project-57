@@ -17,14 +17,16 @@ jobs:
           coverage: xdebug
 
       - name: Install dependencies
-        run: make install
+        run: |
+          make install
+          npm ci
+          npm run build
 
       - name: Prepare test environment
         run: |
           mkdir -p storage/framework/{cache,sessions,testing,views}
           chmod -R 775 storage bootstrap/cache database
           make setup-test-db
-          php artisan config:clear
 
       - name: Run tests
         run: make test-coverage

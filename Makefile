@@ -40,6 +40,8 @@ setup-test-db:
 	cp .env.example .env || true
 	php artisan config:clear
 	php artisan key:generate
+	npm ci
+	npm run build  # Добавьте эту строку
 	php artisan migrate:fresh --env=testing
 
 test:
