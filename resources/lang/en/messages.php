@@ -40,6 +40,8 @@ return [
     'regist__btn' => 'Registration',
     'remember' => 'Remember me',
     'reset__pass' => 'Reset password',
+    'select_executor' => 'Select executor',
+    'select_status' => 'Select status',
     'show__label' => 'Show label',
     'show__task' => 'Show task',
     'status' => 'Status',

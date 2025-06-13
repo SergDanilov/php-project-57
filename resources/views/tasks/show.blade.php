@@ -28,7 +28,7 @@
 
                             <!-- исполнитель -->
                             <div class="w-full">
-                                <p class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.executor') }}: <span    class="font-normal">{{ $task->assignee->name }}</span>
+                                <p class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.executor') }}: <span    class="font-normal">{{ $task->assignee ? $task->assignee->name : '' }}</span>
                                 </p>
                             </div>
 

@@ -2,15 +2,18 @@
 
 namespace Tests\Feature;
 
-use App\Models\Status;
+use App\Models\TaskStatus;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class StatusControllerTest extends TestCase
 {
+    use DatabaseTransactions;
+
     protected User $user;
-    protected Status $status;
+    protected TaskStatus $status;
     protected array $statusData;
     protected array $duplicateStatusData;
     protected array $longNameData;
@@ -22,7 +25,7 @@ class StatusControllerTest extends TestCase
 
         // Создаем статус с тем же именем, что и в duplicateStatusData
         $this->duplicateStatusData = ['name' => 'Дубликат'];
-        $this->status = Status::factory()->create(['name' => $this->duplicateStatusData['name']]);
+        $this->status = TaskStatus::factory()->create(['name' => $this->duplicateStatusData['name']]);
 
         // Основные тестовые данные
         $this->statusData = [
@@ -61,7 +64,7 @@ class StatusControllerTest extends TestCase
             ->assertSessionDoesntHaveErrors()
             ->assertSessionHas('success');
 
-        $this->assertDatabaseHas('statuses', $this->statusData);
+        $this->assertDatabaseHas('task_statuses', $this->statusData);
     }
 
     public function testStatusCreationRequiresName()

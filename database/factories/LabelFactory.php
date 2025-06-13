@@ -11,9 +11,6 @@ use Illuminate\Support\Str;
  */
 class LabelFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
     protected static ?string $name;
 
     /**

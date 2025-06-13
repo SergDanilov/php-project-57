@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use App\Models\Status;
+use App\Models\TaskStatus;
 use App\Models\Label;
 use App\Models\User;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -15,10 +15,6 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     use AuthorizesRequests;
-
-    /**
-     * Display a listing of the resource.
-     */
 
     public function index()
     {
@@ -38,21 +34,18 @@ class TaskController extends Controller
             ->defaultSort('-created_at')
             ->paginate(10);
 
-        $statuses = Status::pluck('name', 'id');
+        $statuses = TaskStatus::pluck('name', 'id');
         $users = User::pluck('name', 'id');
         $labels = Label::pluck('name', 'id');
 
         return view('tasks.index', compact('tasks', 'statuses', 'users', 'labels'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $this->authorize('create', Task::class);
 
-        $statuses = Status::all();
+        $statuses = TaskStatus::all();
         $users = User::all();
         $labels = Label::all();
         $task = new Task();
@@ -60,9 +53,6 @@ class TaskController extends Controller
         return view('tasks.create', compact('statuses', 'users', 'labels', 'task'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $this->authorize('create', Task::class);
@@ -70,7 +60,7 @@ class TaskController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|unique:tasks|max:255',
             'description' => 'nullable|max:1024',
-            'status_id' => 'required|exists:statuses,id',
+            'status_id' => 'required|exists:task_statuses,id',
             'assigned_to_id' => 'nullable|exists:users,id',
         ], [
             'name.required' => 'Это обязательное поле',
@@ -97,34 +87,25 @@ class TaskController extends Controller
         ->with('success', __('messages.task__created'));
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Task $task)
     {
-        $statuses = Status::all();
+        $statuses = TaskStatus::all();
         $users = User::all();
         $labels = Label::all();
 
         return view('tasks.show', compact('task', 'statuses', 'users', 'labels'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Task $task)
     {
         $this->authorize('update', $task);
-        $statuses = Status::all();
+        $statuses = TaskStatus::all();
         $users = User::all();
         $labels = Label::all();
 
         return view('tasks.edit', compact('task', 'statuses', 'users', 'labels'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Task $task)
     {
         $this->authorize('update', $task);
@@ -132,6 +113,8 @@ class TaskController extends Controller
             'name' => 'required|unique:tasks,name,' . $task->id . '|max:255',
             'labels' => 'array',
             'labels.*' => 'exists:labels,id',
+        ], [
+            'name.required' => 'Это обязательное поле',
         ]);
 
         $task->update($request->all());
@@ -146,9 +129,6 @@ class TaskController extends Controller
             ->with('success', __('messages.task__updated'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Task $task)
     {
         $this->authorize('delete', $task);

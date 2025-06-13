@@ -3,14 +3,11 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Status;
+use App\Models\TaskStatus;
 use Illuminate\Database\Seeder;
 
-class StatusSeeder extends Seeder
+class TaskStatusSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $statuses = [
@@ -21,7 +18,7 @@ class StatusSeeder extends Seeder
         ];
 
         foreach ($statuses as $status) {
-            Status::firstOrCreate(
+            TaskStatus::firstOrCreate(
                 ['name' => $status['name']],
                 $status
             );

@@ -3,17 +3,16 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\TaskStatus;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Status>
  */
-class StatusFactory extends Factory
+class TaskStatusFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
+    protected $model = TaskStatus::class;
     protected static ?string $name;
 
     /**
@@ -25,6 +24,8 @@ class StatusFactory extends Factory
     {
         return [
             'name' => fake()->unique()->name(),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

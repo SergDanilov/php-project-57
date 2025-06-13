@@ -16,19 +16,15 @@
                             <div class="w-full">
                                 <label for="name" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.name') }}:</label>
                                 <input type="text" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="name" name="name">
+                                    id="name" name="name"  value="{{ old('name', $task->name ?? '') }}">
                                 @error('name')
                                     <div class="text-danger text-red-500 text-xs italic">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="w-full">
                                 <label for="description" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.description') }}:</label>
-                                <textarea
-                                class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32 text-left align-top resize-none"
-                                id="description"
-                                name="description"
-                                style="text-align: left; white-space: pre-wrap; word-wrap: break-word;">
-                                </textarea>
+                                <textarea class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32 text-left align-top resize-none"
+                                id="description" name="description" style="text-align: left; white-space: pre-wrap; word-wrap: break-word;">{{ old('description', $task->description ?? '') }}</textarea>
                                 @error('description')
                                     <div class="text-danger text-red-500 text-xs italic">{{ $message }}</div>
                                 @enderror
@@ -38,9 +34,12 @@
                             <div class="w-full">
                                 <label for="status_id" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.status') }}:</label>
                                 <select name="status_id" id="status_id" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                    <option value="" selected="selected"></option>
+                                    <option value="" selected="selected">-- {{ __('messages.select_status') }} --</option>
                                     @foreach($statuses as $status)
-                                        <option value="{{ $status->id }}">{{ $status->name }}</option>
+                                        <option value="{{ $status->id }}"
+                                            @if(old('status_id', $task->status_id ?? '') == $status->id) selected @endif>
+                                            {{ $status->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('status_id')
@@ -52,9 +51,12 @@
                             <div class="w-full">
                                 <label for="assigned_to_id" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.executor') }}:</label>
                                 <select name="assigned_to_id" id="assigned_to_id" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                    <option value="" selected="selected">{{__('Выберите исполнителя') }}</option>
+                                    <option value="" selected="selected">-- {{ __('messages.select_executor') }} --</option>
                                     @foreach($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        <option value="{{ $user->id }}"
+                                            @if(old('assigned_to_id', $task->assigned_to_id ?? '') == $user->id) selected @endif>
+                                            {{ $user->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('assigned_to_id')
@@ -63,16 +65,16 @@
                             </div>
 
                             <div class="w-full">
-                                <label for="labels" class="block text-gray-700 text-sm font-bold mb-2">Метки</label>
+                                <label for="labels" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.labels') }}:</label>
                                 <select name="labels[]" id="labels" multiple  class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                     @foreach($labels as $label)
-                                        <option value="{{ $label->id }}">{{ $label->name }}</option>
+                                        <option value="{{ $label->id }}"
+                                            @if(in_array($label->id, old('labels', $task->labels->pluck('id')->toArray() ?? []))) selected @endif>
+                                            {{ $label->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
-
-                            <!-- Скрытое поле для created_by_id -->
-                            <!-- <input type="hidden" name="created_by_id" value="{{ auth()->id() }}"> -->
                         </div>
                     @can('create', $task)
                         <div class="flex items-center justify-between">

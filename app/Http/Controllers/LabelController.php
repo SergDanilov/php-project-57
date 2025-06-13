@@ -11,9 +11,6 @@ class LabelController extends Controller
 {
     use AuthorizesRequests;
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $labels = Label::orderBy('created_at', 'desc')
@@ -21,18 +18,12 @@ class LabelController extends Controller
         return view('labels.index', compact('labels'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $this->authorize('create', Label::class);
         return view('labels.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $this->authorize('create', Label::class);
@@ -49,26 +40,17 @@ class LabelController extends Controller
             ->with('success', __('messages.label__created'));
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Label $label)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Label $label)
     {
         $this->authorize('update', $label);
         return view('labels.edit', compact('label'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Label $label)
     {
         $this->authorize('update', $label);
@@ -82,9 +64,6 @@ class LabelController extends Controller
             ->with('success', __('messages.label__updated'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Label $label)
     {
         $this->authorize('delete', $label);

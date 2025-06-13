@@ -8,15 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Schema::table('tasks', function (Blueprint $table) {
-        //     $table->foreignId('status_id')->constrained('statuses');
-        // });
+        Schema::rename('statuses', 'task_statuses');
     }
 
     public function down(): void
     {
-        // Schema::table('tasks', function (Blueprint $table) {
-        //     //
-        // });
+        Schema::rename('task_statuses', 'statuses');
     }
 };

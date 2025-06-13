@@ -20,19 +20,14 @@
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="name"
                                     name="name"
-                                    value="{{ old('name', $task->name) }}"
-                                    required>
+                                    value="{{ old('name', $task->name) }}">
                                 @error('name')
                                     <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="w-full">
                                 <label for="description" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.description') }}:</label>
-                                <textarea
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="description"
-                                    name="description">{{ old('description', $task->description ?? '') }}
-                                </textarea>
+                                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" name="description">{{ old('description', $task->description ?? '') }}</textarea>
                                 @error('description')
                                     <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                 @enderror
@@ -54,7 +49,7 @@
                             <div class="w-full">
                                 <label for="assigned_to_id" class="block text-gray-700 text-sm font-bold mb-2">{{ __('messages.executor') }}:</label>
                                 <select name="assigned_to_id" id="assigned_to_id" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                    <option value="{{ $task->assignee->id }}">{{ $task->assignee->name }}</option>
+                                    <option value="{{ optional($task->assignee)->id }}">{{ optional($task->assignee)->name }}</option>
                                     @foreach($users as $user)
                                         <option value="{{ old('user', $user->id)}}">{{ $user->name }}</option>
                                     @endforeach

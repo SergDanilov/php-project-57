@@ -39,6 +39,8 @@ return [
     'regist__btn' => 'Регистрация',
     'remember' => 'Запомнить',
     'reset__pass' => 'Сбросить пароль',
+    'select_executor' => 'Выберете исполнителя',
+    'select_status' => 'Выберите статус',
     'show__label' => 'Показать метку',
     'show__task' => 'Просмотр задачи',
     'status' => 'Статус',
