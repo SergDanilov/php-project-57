@@ -14,9 +14,8 @@ class StatusController extends Controller
     public function index()
     {
         $statuses = TaskStatus::select('id', 'name', 'created_at')
-                    ->orderBy('created_at', 'desc')
+                    ->latest('updated_at')
                     ->paginate(10);
-                    // ->get();
         return view('statuses.index', compact('statuses'));
     }
 
@@ -29,16 +28,16 @@ class StatusController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', TaskStatus::class);
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|unique:task_statuses|max:255',
             ], [
                 'name.required' => 'Это обязательное поле',
                 'name.unique' => 'Статус с таким именем уже существует',
             ]);
 
-        TaskStatus::create($request->all());
+        TaskStatus::create($validatedData);
 
-        return redirect()->route('task_statuses.index')
+        return to_route('task_statuses.index')
             ->with('success', __('messages.status__created'));
     }
 
@@ -62,7 +61,7 @@ class StatusController extends Controller
 
         $task_status->update($request->all());
 
-        return redirect()->route('task_statuses.index')
+        return to_route('task_statuses.index')
             ->with('success', __('messages.status__updated'));
     }
 
@@ -75,6 +74,6 @@ class StatusController extends Controller
         }
 
         $task_status->delete();
-        return redirect()->route('task_statuses.index')->with('success', __('messages.status__deleted'));
+        return to_route('task_statuses.index')->with('success', __('messages.status__deleted'));
     }
 }

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\TaskStatus;
 use App\Models\User;
+use App\Models\Task;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -67,6 +68,68 @@ class StatusControllerTest extends TestCase
         $this->assertDatabaseHas('task_statuses', $this->statusData);
     }
 
+    public function testGuestCannotCreateStatus()
+    {
+        $response = $this->post(route('task_statuses.store'), $this->statusData);
+
+        $response->assertRedirect(route('login'));
+        $this->assertDatabaseMissing('task_statuses', $this->statusData);
+    }
+
+    public function testAuthenticatedUserCanAccessEditForm()
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('task_statuses.edit', $this->status));
+
+        $response->assertOk()
+            ->assertViewIs('statuses.edit')
+            ->assertViewHas('task_status', $this->status);
+    }
+
+    public function testGuestCannotAccessEditForm()
+    {
+        $response = $this->get(route('task_statuses.edit', $this->status));
+        $response->assertRedirect(route('login'));
+    }
+
+    public function testCreatorCanDeleteStatus()
+    {
+        $response = $this->actingAs($this->user)
+            ->delete(route('task_statuses.destroy', $this->status));
+
+        $response->assertRedirect(route('task_statuses.index'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('task_statuses', ['id' => $this->status->id]);
+    }
+
+    public function testGuestCannotDeleteStatus()
+    {
+        $response = $this->delete(route('task_statuses.destroy', $this->status));
+
+        $response->assertRedirect(route('login'));
+        $this->assertDatabaseHas('task_statuses', ['id' => $this->status->id]);
+    }
+
+    public function testCannotDeleteStatusWithAssociatedTasks()
+    {
+        // Создаем задачу с этим статусом
+        $task = Task::factory()->create([
+            'status_id' => $this->status->id,
+            'created_by_id' => $this->user->id
+        ]);
+
+        // Пытаемся удалить статус
+        $response = $this->actingAs($this->user)
+            ->delete(route('task_statuses.destroy', $this->status));
+
+        $response->assertRedirect()
+            ->assertSessionHas('error', __('messages.status__cannot__be__deleted'));
+
+        $this->assertDatabaseHas('task_statuses', ['id' => $this->status->id]);
+        $this->assertDatabaseHas('tasks', ['status_id' => $this->status->id]);
+    }
+
     public function testStatusCreationRequiresName()
     {
         $response = $this->actingAs($this->user)
@@ -89,12 +152,5 @@ class StatusControllerTest extends TestCase
             ->post(route('task_statuses.store'), $this->longNameData);
 
         $response->assertSessionHasErrors(['name']);
-    }
-
-    public function testGuestCannotCreateStatus()
-    {
-        $response = $this->post(route('task_statuses.store'), $this->statusData);
-
-        $response->assertRedirect(route('login'));
     }
 }

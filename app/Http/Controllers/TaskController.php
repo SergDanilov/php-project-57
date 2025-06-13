@@ -83,7 +83,7 @@ class TaskController extends Controller
             $task->labels()->attach($validatedLabels['labels']);
         }
 
-        return redirect()->route('tasks.index')
+        return to_route('tasks.index')
         ->with('success', __('messages.task__created'));
     }
 
@@ -125,7 +125,7 @@ class TaskController extends Controller
             $task->labels()->sync([]); // Удалить все метки, если метки не переданы
         }
 
-        return redirect()->route('tasks.index')
+        return to_route('tasks.index')
             ->with('success', __('messages.task__updated'));
     }
 
@@ -135,7 +135,7 @@ class TaskController extends Controller
 
         $task->delete();
 
-        return redirect()->route('tasks.index')
+        return to_route('tasks.index')
         ->with('success', __('messages.task__deleted'));
     }
 }

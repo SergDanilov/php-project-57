@@ -110,7 +110,18 @@ class TaskControllerTest extends TestCase
         $this->assertDatabaseHas('tasks', $this->taskData);
     }
 
-        public function testAuthenticatedUserCanUpdateTask()
+    public function testGuestCannotCreateTask()
+    {
+        $response = $this->post(route('tasks.store'), [
+            'name' => 'Гостевая задача',
+            'status_id' => $this->status->id,
+            'assigned_to_id' => $this->assignee->id,
+        ]);
+
+        $response->assertRedirect(route('login'));
+    }
+
+    public function testAuthenticatedUserCanUpdateTask()
     {
         $updatedData = [
             'name' => 'Обновленная задача',
@@ -132,8 +143,28 @@ class TaskControllerTest extends TestCase
         ]);
     }
 
-    public function testAuthenticatedUserCanDeleteTask()
+    public function testGuestCannotUpdateTask()
     {
+        $updatedData = [
+            'name' => 'Попытка изменения без авторизации',
+            'status_id' => $this->status->id,
+            'assigned_to_id' => $this->assignee->id,
+            'labels' => [$this->label->id]
+        ];
+
+        $response = $this->put(route('tasks.update', $this->task), $updatedData);
+
+        $response->assertRedirect(route('login'));
+
+        $this->assertDatabaseMissing('tasks', [
+            'id' => $this->task->id,
+            'name' => 'Попытка изменения без авторизации'
+        ]);
+    }
+
+    public function testOnlyCreatorCanDeleteTask()
+    {
+        // 1. Проверяем, что автор может удалить задачу
         $response = $this->actingAs($this->user)
             ->delete(route('tasks.destroy', $this->task));
 
@@ -141,21 +172,25 @@ class TaskControllerTest extends TestCase
             ->assertSessionHas('success');
 
         $this->assertDatabaseMissing('tasks', ['id' => $this->task->id]);
+
+        // 2. Пересоздаем задачу для следующих проверок
+        $this->task = Task::factory()->create([
+            'created_by_id' => $this->user->id
+        ]);
+
+        // 3. Проверяем, что другой авторизованный пользователь не может удалить
+        $otherUser = User::factory()->create();
+        $response = $this->actingAs($otherUser)
+            ->delete(route('tasks.destroy', $this->task));
+
+        $response->assertForbidden(); // 403 Forbidden
+        $this->assertDatabaseHas('tasks', ['id' => $this->task->id]); // Задача осталась в БД
     }
 
     public function testGuestCannotDeleteTask()
     {
         $response = $this->delete(route('tasks.destroy', $this->task));
         $response->assertRedirect(route('login'));
-    }
-
-    public function testUnauthorizedUserCannotDeleteTask()
-    {
-        $otherUser = User::factory()->create();
-        $response = $this->actingAs($otherUser)
-            ->delete(route('tasks.destroy', $this->task));
-
-        $response->assertForbidden();
     }
 
     public function testTaskCreationRequiresName()
@@ -184,16 +219,5 @@ class TaskControllerTest extends TestCase
             ->post(route('tasks.store'), $this->longNameData);
 
         $response->assertSessionHasErrors(['name']);
-    }
-
-    public function testGuestCannotCreateTask()
-    {
-        $response = $this->post(route('tasks.store'), [
-            'name' => 'Гостевая задача',
-            'status_id' => $this->status->id,
-            'assigned_to_id' => $this->assignee->id,
-        ]);
-
-        $response->assertRedirect(route('login'));
     }
 }

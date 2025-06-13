@@ -13,7 +13,7 @@ class LabelController extends Controller
 
     public function index()
     {
-        $labels = Label::orderBy('created_at', 'desc')
+        $labels = Label::latest('updated_at')
                   ->paginate(10);
         return view('labels.index', compact('labels'));
     }
@@ -36,7 +36,7 @@ class LabelController extends Controller
 
         Label::create($request->all());
 
-        return redirect()->route('labels.index')
+        return to_route('labels.index')
             ->with('success', __('messages.label__created'));
     }
 
@@ -55,12 +55,12 @@ class LabelController extends Controller
     {
         $this->authorize('update', $label);
         $request->validate([
-            'name' => 'required|unique:statuses,name,' . $label->id . '|max:64',
+            'name' => 'required|unique:task_statuses,name,' . $label->id . '|max:64',
         ]);
 
         $label->update($request->all());
 
-        return redirect()->route('labels.index')
+        return to_route('labels.index')
             ->with('success', __('messages.label__updated'));
     }
 
@@ -77,7 +77,7 @@ class LabelController extends Controller
 
 
         $label->delete();
-        return redirect()->route('labels.index')
+        return to_route('labels.index')
             ->with('success', __('messages.label__deleted'));
     }
 }

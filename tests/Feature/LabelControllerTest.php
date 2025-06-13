@@ -46,6 +46,7 @@ class LabelControllerTest extends TestCase
         $this->task->labels()->attach($this->label->id);
     }
 
+    // Доступ к форме создания
     public function testAuthenticatedUserCanAccessCreateForm()
     {
         $response = $this->actingAs($this->user)
@@ -61,6 +62,7 @@ class LabelControllerTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
+    // Создание меток
     public function testAuthenticatedUserCanCreateLabel()
     {
         $response = $this->actingAs($this->user)
@@ -73,6 +75,72 @@ class LabelControllerTest extends TestCase
         $this->assertDatabaseHas('labels', $this->labelData);
     }
 
+    public function testGuestCannotCreateLabel()
+    {
+        $response = $this->post(route('labels.store'), $this->labelData);
+        $response->assertRedirect(route('login'));
+    }
+
+    // Редактирование меток
+    public function testAuthenticatedUserCanUpdateLabel()
+    {
+        $updatedData = ['name' => 'Updated Label'];
+
+        $response = $this->actingAs($this->user)
+            ->put(route('labels.update', $this->label), $updatedData);
+
+        $response->assertRedirect(route('labels.index'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('labels', $updatedData);
+    }
+
+    public function testGuestCannotUpdateLabel()
+    {
+        $response = $this->put(route('labels.update', $this->label), ['name' => 'Updated']);
+        $response->assertRedirect(route('login'));
+    }
+
+    // Удаление меток
+    public function testAuthenticatedUserCanDeleteUnusedLabel()
+    {
+        // 1. Создаем тестовую метку без привязки к задачам
+        $label = Label::factory()->create();
+
+        // 2. Пытаемся удалить авторизованным пользователем
+        $response = $this->actingAs($this->user)
+            ->delete(route('labels.destroy', $label));
+
+        // 3. Проверяем редирект и сообщение об успехе
+        $response->assertRedirect(route('labels.index'))
+            ->assertSessionHas('success');
+
+        // 4. Проверяем, что метки больше нет в БД
+        $this->assertDatabaseMissing('labels', ['id' => $label->id]);
+    }
+
+    public function testCannotDeleteLabelAttachedToTask()
+    {
+        $response = $this->actingAs($this->user)
+            ->delete(route('labels.destroy', $this->label->id));
+
+        $response->assertForbidden()
+            ->assertSessionHas('error', __('messages.label__cannot__be__deleted'));
+
+        $this->assertDatabaseHas('labels', ['id' => $this->label->id]);
+        $this->assertDatabaseHas('task_label', [
+            'task_id' => $this->task->id,
+            'label_id' => $this->label->id
+        ]);
+    }
+
+    public function testGuestCannotDeleteLabel()
+    {
+        $response = $this->delete(route('labels.destroy', $this->label));
+        $response->assertRedirect(route('login'));
+    }
+
+    // остальное
     public function testLabelCreationRequiresName()
     {
         $response = $this->actingAs($this->user)
@@ -95,38 +163,5 @@ class LabelControllerTest extends TestCase
             ->post(route('labels.store'), $this->longLabelData);
 
         $response->assertSessionHasErrors(['name']);
-    }
-
-    public function testGuestCannotCreateLabel()
-    {
-        $response = $this->post(route('labels.store'), $this->labelData);
-        $response->assertRedirect(route('login'));
-    }
-
-    public function testCannotDeleteLabelAttachedToTask()
-    {
-        $response = $this->actingAs($this->user)
-            ->delete(route('labels.destroy', $this->label->id));
-
-        $response->assertForbidden()
-            ->assertSessionHas('error', __('messages.label__cannot__be__deleted'));
-
-        $this->assertDatabaseHas('labels', ['id' => $this->label->id]);
-        $this->assertDatabaseHas('task_label', [
-            'task_id' => $this->task->id,
-            'label_id' => $this->label->id
-        ]);
-    }
-
-    public function testCanDeleteUnattachedLabel()
-    {
-        $unattachedLabel = Label::factory()->create();
-        $response = $this->actingAs($this->user)
-            ->delete(route('labels.destroy', $unattachedLabel->id));
-
-        $response->assertRedirect(route('labels.index'))
-            ->assertSessionHas('success');
-
-        $this->assertDatabaseMissing('labels', ['id' => $unattachedLabel->id]);
     }
 }
