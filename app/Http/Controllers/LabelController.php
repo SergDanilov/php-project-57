@@ -40,11 +40,6 @@ class LabelController extends Controller
             ->with('success', __('messages.label__created'));
     }
 
-    public function show(Label $label)
-    {
-        //
-    }
-
     public function edit(Label $label)
     {
         $this->authorize('update', $label);
@@ -69,8 +64,7 @@ class LabelController extends Controller
         $this->authorize('delete', $label);
 
         if ($label->tasks()->exists()) {
-            return redirect()
-            ->route('labels.index')
+            return to_route('labels.index')
             ->with('error', __('messages.label__cannot__be__deleted'))
             ->setStatusCode(403);
         }

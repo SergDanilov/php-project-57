@@ -41,11 +41,6 @@ class StatusController extends Controller
             ->with('success', __('messages.status__created'));
     }
 
-    public function show(TaskStatus $status)
-    {
-        //
-    }
-
     public function edit(TaskStatus $task_status)
     {
         $this->authorize('update', $task_status);

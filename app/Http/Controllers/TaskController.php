@@ -62,31 +62,24 @@ class TaskController extends Controller
             'description' => 'nullable|max:1024',
             'status_id' => 'required|exists:task_statuses,id',
             'assigned_to_id' => 'nullable|exists:users,id',
+            'labels' => 'nullable|array',
+            'labels.*' => 'exists:labels,id'
         ], [
             'name.required' => __('messages.required__field'),
             'name.unique' => __('messages.task__name__already__exists'),
             'status_id.required' => __('messages.required__field'),
         ]);
 
-        // Добавляем текущего пользователя как создателя задачи
-        // $validatedData['created_by_id'] = Auth::id();
+        // Создаем задачу с валидными данными и отношением к автору задачи
+        $task = Auth::user()->createdTasks()->create($validatedData);
 
-        // Создаем задачу с проверенными данными
-        // $task = Task::create($validatedData);
-        $task = Auth::user()->createdTasks()->make($validatedData);
-        $task->save();
-
-        // Привязка меток к задаче с валидацией
-        if ($request->has('labels')) {
-            $validatedLabels = $request->validate([
-                'labels' => 'array',
-                'labels.*' => 'exists:labels,id'
-            ]);
-            $task->labels()->attach($validatedLabels['labels']);
+        // Привязка меток, если они есть
+        if (!empty($validatedData['labels'])) {
+            $task->labels()->attach($validatedData['labels']);
         }
 
         return to_route('tasks.index')
-        ->with('success', __('messages.task__created'));
+            ->with('success', __('messages.task__created'));
     }
 
     public function show(Task $task)
@@ -120,7 +113,7 @@ class TaskController extends Controller
         ]);
 
         $task->update($validatedData);
-         // Обновление меток
+        // Обновление меток
         if ($request->has('labels')) {
             $task->labels()->sync($request->input('labels'));
         } else {
