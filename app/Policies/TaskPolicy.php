@@ -30,7 +30,7 @@ class TaskPolicy
 
     public function delete(User $user, Task $task): bool
     {
-        return $user->id === $task->created_by_id;
+        return $task->creator()->is($user);
     }
 
     public function restore(User $user, Task $task): bool
@@ -40,6 +40,6 @@ class TaskPolicy
 
     public function forceDelete(User $user, Task $task): bool
     {
-        return $user->id === $task->created_by_id;
+        return $task->creator()->is($user);
     }
 }
