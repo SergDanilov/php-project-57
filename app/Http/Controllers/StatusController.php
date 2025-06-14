@@ -31,8 +31,8 @@ class StatusController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|unique:task_statuses|max:255',
             ], [
-                'name.required' => 'Это обязательное поле',
-                'name.unique' => 'Статус с таким именем уже существует',
+                'name.required' => __('messages.required__field'),
+                'name.unique' => __('messages.status__name__already__exists'),
             ]);
 
         TaskStatus::create($validatedData);
@@ -55,11 +55,11 @@ class StatusController extends Controller
     public function update(Request $request, TaskStatus $task_status)
     {
         $this->authorize('update', $task_status);
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|unique:task_statuses,name,' . $task_status->id . '|max:255',
         ]);
 
-        $task_status->update($request->all());
+        $task_status->update($validatedData);
 
         return to_route('task_statuses.index')
             ->with('success', __('messages.status__updated'));

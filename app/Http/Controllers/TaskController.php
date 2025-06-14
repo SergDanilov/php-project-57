@@ -63,16 +63,18 @@ class TaskController extends Controller
             'status_id' => 'required|exists:task_statuses,id',
             'assigned_to_id' => 'nullable|exists:users,id',
         ], [
-            'name.required' => 'Это обязательное поле',
-            'name.unique' => 'Задача с таким именем уже существует',
-            'status_id.required' => 'Это обязательное поле',
+            'name.required' => __('messages.required__field'),
+            'name.unique' => __('messages.task__name__already__exists'),
+            'status_id.required' => __('messages.required__field'),
         ]);
 
         // Добавляем текущего пользователя как создателя задачи
-        $validatedData['created_by_id'] = Auth::id();
+        // $validatedData['created_by_id'] = Auth::id();
 
         // Создаем задачу с проверенными данными
-        $task = Task::create($validatedData);
+        // $task = Task::create($validatedData);
+        $task = Auth::user()->createdTasks()->make($validatedData);
+        $task->save();
 
         // Привязка меток к задаче с валидацией
         if ($request->has('labels')) {
@@ -109,15 +111,15 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         $this->authorize('update', $task);
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|unique:tasks,name,' . $task->id . '|max:255',
             'labels' => 'array',
             'labels.*' => 'exists:labels,id',
         ], [
-            'name.required' => 'Это обязательное поле',
+            'name.required' => __('messages.required__field'),
         ]);
 
-        $task->update($request->all());
+        $task->update($validatedData);
          // Обновление меток
         if ($request->has('labels')) {
             $task->labels()->sync($request->input('labels'));

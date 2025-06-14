@@ -27,14 +27,14 @@ class LabelController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Label::class);
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|unique:labels|max:64',
             ], [
-                'name.required' => 'Это обязательное поле',
-                'name.unique' => 'Метка с таким именем уже существует',
+                'name.required' => __('messages.required__field'),
+                'name.unique' => __('messages.label__name__already__exists'),
             ]);
 
-        Label::create($request->all());
+        Label::create($validatedData);
 
         return to_route('labels.index')
             ->with('success', __('messages.label__created'));
@@ -54,11 +54,11 @@ class LabelController extends Controller
     public function update(Request $request, Label $label)
     {
         $this->authorize('update', $label);
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|unique:task_statuses,name,' . $label->id . '|max:64',
         ]);
 
-        $label->update($request->all());
+        $label->update($validatedData);
 
         return to_route('labels.index')
             ->with('success', __('messages.label__updated'));
