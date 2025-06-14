@@ -4,6 +4,7 @@ return [
     'actions' => 'Actions',
     'apply__filters' => 'Go',
     'author' => 'Author',
+    'back' => 'Go back',
     'cancel' => 'Cancel',
     'confirm__pass' => 'Confirm Password',
     'contacts' => 'Contacts',

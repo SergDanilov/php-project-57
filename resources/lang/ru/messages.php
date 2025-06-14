@@ -4,6 +4,7 @@ return [
     'actions' => 'Действия',
     'apply__filters' => 'Применить',
     'author' => 'Автор',
+    'back' => 'Назад',
     'cancel' => 'Сбросить',
     'confirm__pass' => 'Подтвердить пароль',
     'contacts' => 'Контакты',
