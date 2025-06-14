@@ -59,7 +59,7 @@ class TaskController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|unique:tasks|max:255',
-            'description' => 'nullable|max:1024',
+            'description' => 'nullable|max:528',
             'status_id' => 'required|exists:task_statuses,id',
             'assigned_to_id' => 'nullable|exists:users,id',
             'labels' => 'nullable|array',
@@ -68,6 +68,7 @@ class TaskController extends Controller
             'name.required' => __('messages.required__field'),
             'name.unique' => __('messages.task__name__already__exists'),
             'status_id.required' => __('messages.required__field'),
+            'description.max' => __('messages.much__words'),
         ]);
 
         // Создаем задачу с валидными данными и отношением к автору задачи
@@ -106,10 +107,12 @@ class TaskController extends Controller
         $this->authorize('update', $task);
         $validatedData = $request->validate([
             'name' => 'required|unique:tasks,name,' . $task->id . '|max:255',
+            'description' => 'nullable|max:528',
             'labels' => 'array',
             'labels.*' => 'exists:labels,id',
         ], [
             'name.required' => __('messages.required__field'),
+            'description.max' => __('messages.much__words'),
         ]);
 
         $task->update($validatedData);

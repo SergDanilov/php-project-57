@@ -32,6 +32,7 @@ return [
     'labels' => 'Labels',
     'login' => 'Log in',
     'login__btn' => 'Login',
+    'much__words' => 'Too much words there',
     'main__link' => 'Task manager',
     'name' => 'Name',
     'no_labels' => 'No labels',

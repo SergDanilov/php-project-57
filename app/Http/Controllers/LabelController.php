@@ -29,9 +29,11 @@ class LabelController extends Controller
         $this->authorize('create', Label::class);
         $validatedData = $request->validate([
             'name' => 'required|unique:labels|max:64',
+            'description' => 'nullable|max:528',
             ], [
                 'name.required' => __('messages.required__field'),
                 'name.unique' => __('messages.label__name__already__exists'),
+                'description.max' => __('messages.much__words'),
             ]);
 
         Label::create($validatedData);
@@ -51,6 +53,10 @@ class LabelController extends Controller
         $this->authorize('update', $label);
         $validatedData = $request->validate([
             'name' => 'required|unique:task_statuses,name,' . $label->id . '|max:64',
+            'description' => 'nullable|max:528',
+        ], [
+            'name.required' => __('messages.required__field'),
+            'description.max' => __('messages.much__words'),
         ]);
 
         $label->update($validatedData);

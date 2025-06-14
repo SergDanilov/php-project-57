@@ -32,15 +32,13 @@
                     <tr>
                         <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">{{ $label->id }}</td>
                         <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500"> {{ $label->name }}</td>
-
-                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">{{ $label->description }}</td>
+                        <td class="px-6 py-2 whitespace-wrap text-sm text-gray-500">{{ $label->description }}</td>
                         <td class="px-6 py-2 whitespace-nowrap text-right">
                             {{ $label->created_at->format('d.m.Y') }}
                         </td>
-
                         @auth
-                        <td class="px-6 py-2 whitespace-nowrap text-sm font-medium flex justify-end">
-                            <div class="flex space-x-3">
+                        <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-right">
+                            <div class="space-x-3">
                                 <a href="{{ route('labels.edit', $label->id) }}"
                                 class="text-blue-600 hover:text-blue-900 mr-3">
                                     {{ __('messages.edit') }}
