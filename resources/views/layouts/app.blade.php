@@ -29,11 +29,21 @@
 
             <!-- Page Content -->
             <main class="flex-grow">
-                {{ $slot }}
+                <div class="py-12">
+                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                            <div class="p-6 bg-white border-b border-gray-200">
+                                <x-flash-message type="success" :message="session('success')" />
+                                <x-flash-message type="error" :message="session('error')" />
+                                {{ $slot }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
 
-        <!-- Футер -->
+        <!-- Page Footer -->
         <footer class="bg-dark py-4">
             <section class="bg-dark dark:bg-gray-900">
                 @include('layouts.footer')
