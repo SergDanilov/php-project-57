@@ -75,7 +75,7 @@ class TaskController extends Controller
         $task = Auth::user()->createdTasks()->create($validatedData);
 
         // Привязка меток, если они есть
-        if (!empty($validatedData['labels'])) {
+        if (isset($validatedData['labels']) && $validatedData['labels']) {
             $task->labels()->attach($validatedData['labels']);
         }
 

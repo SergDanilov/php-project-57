@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class StatusControllerTest extends TestCase
+class TaskStatusControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -37,6 +37,31 @@ class StatusControllerTest extends TestCase
         $this->longNameData = [
             'name' => str_repeat('a', 256)
         ];
+    }
+
+    public function testIndexDisplaysStatuses()
+    {
+        // Создаем 15 статусов, чтобы проверить пагинацию
+        TaskStatus::factory()->count(15)->create();
+
+        $response = $this->actingAs($this->user)
+            ->get(route('task_statuses.index'));
+
+        $response->assertOk()
+            ->assertViewIs('statuses.index')
+            ->assertViewHas('statuses') // Проверяем, что переданы статусы
+            ->assertSeeText(TaskStatus::latest('updated_at')->first()->name); // Проверяем порядок
+
+        // Проверяем пагинацию (должно быть 10 записей на странице)
+        $this->assertCount(10, $response->viewData('statuses'));
+    }
+
+    public function testGuestCanViewStatusesIndex()
+    {
+        $response = $this->get(route('task_statuses.index'));
+
+        $response->assertOk()
+            ->assertViewIs('statuses.index');
     }
 
     public function testAuthenticatedUserCanAccessCreateForm()
