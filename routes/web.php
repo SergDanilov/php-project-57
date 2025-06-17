@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\StatusController;
+use App\Http\Controllers\TaskStatusController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\LabelController;
 use Illuminate\Support\Facades\Cookie;
@@ -43,11 +43,11 @@ Route::controller(TaskController::class)->group(function () {
 });
 
 //Statuses routes
-Route::resource('task_statuses', StatusController::class)
+Route::resource('task_statuses', TaskStatusController::class)
     ->except('index', 'show')
     ->middleware(['auth', 'verified']);
 
-Route::controller(StatusController::class)->group(function () {
+Route::controller(TaskStatusController::class)->group(function () {
     Route::get('/task_statuses', 'index')->name('task_statuses.index');
     Route::get('/task_statuses/{status}', 'show')->name('task_statuses.show');
 });

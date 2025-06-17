@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class StatusController extends Controller
+class TaskStatusController extends Controller
 {
     use AuthorizesRequests;
 
