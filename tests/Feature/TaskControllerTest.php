@@ -15,7 +15,7 @@ class TaskControllerTest extends TestCase
 
     protected User $user;
     protected User $assignee;
-    protected TaskStatus $status;
+    protected TaskStatus $taskStatus;
     protected Label $label;
     protected Task $task;
     protected array $taskData;
@@ -28,12 +28,12 @@ class TaskControllerTest extends TestCase
 
         $this->user = User::factory()->create();
         $this->assignee = User::factory()->create();
-        $this->status = TaskStatus::factory()->create();
+        $this->taskStatus = TaskStatus::factory()->create();
         $this->label = Label::factory()->create();
 
         $this->task = Task::factory()->create([
             'name' => 'Тестовая задача',
-            'status_id' => $this->status->id,
+            'status_id' => $this->taskStatus->id,
             'assigned_to_id' => $this->assignee->id,
             'created_by_id' => $this->user->id,
         ]);
@@ -42,7 +42,7 @@ class TaskControllerTest extends TestCase
         // основные тестовые данные задачи
         $this->taskData = [
             'name' => 'Новая задача',
-            'status_id' => $this->status->id,
+            'status_id' => $this->taskStatus->id,
             'assigned_to_id' => $this->assignee->id,
             'created_by_id' => $this->user->id,
         ];
@@ -50,21 +50,21 @@ class TaskControllerTest extends TestCase
         // для проверки дублирования
         $this->duplicateTaskData = [
             'name' => 'Дубликат задачи',
-            'status_id' => $this->status->id,
+            'status_id' => $this->taskStatus->id,
             'assigned_to_id' => $this->assignee->id,
         ];
 
         // для проверки длины имени
         $this->longNameData = [
             'name' => str_repeat('a', 256),
-            'status_id' => $this->status->id,
+            'status_id' => $this->taskStatus->id,
             'assigned_to_id' => $this->assignee->id,
         ];
 
         // дубликат для теста уникальности
         Task::factory()->create([
             'name' => $this->duplicateTaskData['name'],
-            'status_id' => $this->status->id,
+            'status_id' => $this->taskStatus->id,
             'assigned_to_id' => $this->assignee->id,
             'created_by_id' => $this->user->id,
         ]);
@@ -114,7 +114,7 @@ class TaskControllerTest extends TestCase
     {
         $response = $this->post(route('tasks.store'), [
             'name' => 'Гостевая задача',
-            'status_id' => $this->status->id,
+            'status_id' => $this->taskStatus->id,
             'assigned_to_id' => $this->assignee->id,
         ]);
 
@@ -125,7 +125,7 @@ class TaskControllerTest extends TestCase
     {
         $updatedData = [
             'name' => 'Обновленная задача',
-            'status_id' => $this->status->id,
+            'status_id' => $this->taskStatus->id,
             'assigned_to_id' => $this->assignee->id,
             'labels' => [$this->label->id]
         ];
@@ -147,7 +147,7 @@ class TaskControllerTest extends TestCase
     {
         $updatedData = [
             'name' => 'Попытка изменения без авторизации',
-            'status_id' => $this->status->id,
+            'status_id' => $this->taskStatus->id,
             'assigned_to_id' => $this->assignee->id,
             'labels' => [$this->label->id]
         ];
@@ -198,7 +198,7 @@ class TaskControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->post(route('tasks.store'), [
                 'name' => '',
-                'status_id' => $this->status->id,
+                'status_id' => $this->taskStatus->id,
                 'assigned_to_id' => $this->assignee->id,
             ]);
 
