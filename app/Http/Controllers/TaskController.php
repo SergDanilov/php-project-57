@@ -108,6 +108,7 @@ class TaskController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|unique:tasks,name,' . $task->id . '|max:255',
             'description' => 'nullable|max:528',
+            'assigned_to_id' => 'nullable|exists:users,id',
             'labels' => 'array',
             'labels.*' => 'exists:labels,id',
         ], [
