@@ -46,6 +46,32 @@ class LabelControllerTest extends TestCase
         $this->task->labels()->attach($this->label->id);
     }
 
+    // Проверка индексной страницы и пагинации
+    public function testIndexDisplaysLabels()
+    {
+        // Создаем 15 статусов, чтобы проверить пагинацию
+        Label::factory()->count(15)->create();
+
+        $response = $this->actingAs($this->user)
+            ->get(route('labels.index'));
+
+        $response->assertOk()
+            ->assertViewIs('labels.index')
+            ->assertViewHas('labels') // Проверяем, что переданы все метки
+            ->assertSeeText(Label::latest('updated_at')->first()->name); // Проверяем порядок
+
+        // Проверяем пагинацию (должно быть 10 записей на странице)
+        $this->assertCount(10, $response->viewData('labels'));
+    }
+
+    public function testGuestCanViewLabelsIndex()
+    {
+        $response = $this->get(route('labels.index'));
+
+        $response->assertOk()
+            ->assertViewIs('labels.index');
+    }
+
     // Доступ к форме создания
     public function testAuthenticatedUserCanAccessCreateForm()
     {
@@ -78,6 +104,23 @@ class LabelControllerTest extends TestCase
     public function testGuestCannotCreateLabel()
     {
         $response = $this->post(route('labels.store'), $this->labelData);
+        $response->assertRedirect(route('login'));
+    }
+
+    // Править
+    public function testAuthenticatedUserCanAccessEditForm()
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('labels.edit', $this->label));
+
+        $response->assertOk()
+            ->assertViewIs('labels.edit')
+            ->assertViewHas('label', $this->label);
+    }
+
+    public function testGuestCannotAccessEditForm()
+    {
+        $response = $this->get(route('labels.edit', $this->label));
         $response->assertRedirect(route('login'));
     }
 

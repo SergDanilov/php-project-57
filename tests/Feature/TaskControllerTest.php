@@ -121,6 +121,47 @@ class TaskControllerTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
+    public function testAuthenticatedUserCanEditTask()
+    {
+        $updatedData = [
+            'name' => 'Исправлено в задаче',
+            'status_id' => $this->taskStatus->id,
+            'assigned_to_id' => $this->assignee->id,
+            'labels' => [$this->label->id]
+        ];
+
+        $response = $this->actingAs($this->user)
+            ->put(route('tasks.update', $this->task), $updatedData);
+
+        $response->assertRedirect(route('tasks.index'))
+            ->assertSessionDoesntHaveErrors()
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $this->task->id,
+            'name' => 'Исправлено в задаче'
+        ]);
+    }
+
+    public function testGuestCannotEditTask()
+    {
+        $updatedData = [
+            'name' => 'Попытка изменения без авторизации',
+            'status_id' => $this->taskStatus->id,
+            'assigned_to_id' => $this->assignee->id,
+            'labels' => [$this->label->id]
+        ];
+
+        $response = $this->put(route('tasks.update', $this->task), $updatedData);
+
+        $response->assertRedirect(route('login'));
+
+        $this->assertDatabaseMissing('tasks', [
+            'id' => $this->task->id,
+            'name' => 'Попытка изменения без авторизации'
+        ]);
+    }
+
     public function testAuthenticatedUserCanUpdateTask()
     {
         $updatedData = [
@@ -160,6 +201,28 @@ class TaskControllerTest extends TestCase
             'id' => $this->task->id,
             'name' => 'Попытка изменения без авторизации'
         ]);
+    }
+
+    public function testShowDisplaysTaskDetails()
+    {
+        // 1. Подготовка данных
+        $task = Task::factory()->create();
+        $status = TaskStatus::factory()->create();
+        $label = Label::factory()->create();
+        $task->labels()->attach($label);
+
+        // 2. Выполнение запроса
+        $response = $this->get(route('tasks.show', $task));
+
+        // 3. Проверки
+        $response->assertOk()
+            ->assertViewIs('tasks.show')
+            ->assertViewHas('task', $task)
+            ->assertViewHas('statuses')
+            ->assertViewHas('users')
+            ->assertViewHas('labels')
+            ->assertSee($task->name)
+            ->assertSee($label->name);
     }
 
     public function testOnlyCreatorCanDeleteTask()

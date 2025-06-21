@@ -117,6 +117,26 @@ class TaskStatusControllerTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
+    // Редактирование статусов
+    public function testAuthenticatedUserCanUpdateStatus()
+    {
+        $updatedData = ['name' => 'Updated Status'];
+
+        $response = $this->actingAs($this->user)
+            ->put(route('task_statuses.update', $this->status), $updatedData);
+
+        $response->assertRedirect(route('task_statuses.index'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('task_statuses', $updatedData);
+    }
+
+    public function testGuestCannotUpdateStatus()
+    {
+        $response = $this->put(route('task_statuses.update', $this->status), ['name' => 'Updated']);
+        $response->assertRedirect(route('login'));
+    }
+
     public function testCreatorCanDeleteStatus()
     {
         $response = $this->actingAs($this->user)
