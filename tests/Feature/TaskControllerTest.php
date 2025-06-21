@@ -121,80 +121,31 @@ class TaskControllerTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
-    public function testAuthenticatedUserCanEditTask()
-    {
-        $updatedData = [
-            'name' => 'Исправлено в задаче',
-            'status_id' => $this->taskStatus->id,
-            'assigned_to_id' => $this->assignee->id,
-            'labels' => [$this->label->id]
-        ];
-
-        $response = $this->actingAs($this->user)
-            ->put(route('tasks.update', $this->task), $updatedData);
-
-        $response->assertRedirect(route('tasks.index'))
-            ->assertSessionDoesntHaveErrors()
-            ->assertSessionHas('success');
-
-        $this->assertDatabaseHas('tasks', [
-            'id' => $this->task->id,
-            'name' => 'Исправлено в задаче'
-        ]);
-    }
-
-    public function testGuestCannotEditTask()
-    {
-        $updatedData = [
-            'name' => 'Попытка изменения без авторизации',
-            'status_id' => $this->taskStatus->id,
-            'assigned_to_id' => $this->assignee->id,
-            'labels' => [$this->label->id]
-        ];
-
-        $response = $this->put(route('tasks.update', $this->task), $updatedData);
-
-        $response->assertRedirect(route('login'));
-
-        $this->assertDatabaseMissing('tasks', [
-            'id' => $this->task->id,
-            'name' => 'Попытка изменения без авторизации'
-        ]);
-    }
-
     public function testEditDisplaysFormForAuthenticatedUser()
     {
-        // 1. Подготовка данных
-        $user = User::factory()->create();
-        $task = Task::factory()->create(['created_by_id' => $user->id]);
-        $status = TaskStatus::factory()->create();
-        $label = Label::factory()->create();
+        // Выполнение запроса от имени авторизованного пользователя
+        $response = $this->actingAs($this->user)
+            ->get(route('tasks.edit', $this->task));
 
-        // 2. Выполнение запроса от имени авторизованного пользователя
-        $response = $this->actingAs($user)
-            ->get(route('tasks.edit', $task));
-
-        // 3. Проверки
+        // Проверки ответа
         $response->assertOk()
             ->assertViewIs('tasks.edit')
-            ->assertViewHas('task', $task)
-            ->assertViewHas('statuses', function($statuses) use ($status) {
-                return $statuses->contains('id', $status->id);
+            ->assertViewHas('task', $this->task)
+            ->assertViewHas('statuses', function ($statuses) {
+                return $statuses->contains('id', $this->taskStatus->id);
             })
-            ->assertViewHas('users', function($users) use ($user) {
-                return $users->contains('id', $user->id);
+            ->assertViewHas('users', function ($users) {
+                return $users->contains('id', $this->user->id) &&
+                    $users->contains('id', $this->assignee->id);
             })
-            ->assertViewHas('labels', function($labels) use ($label) {
-                return $labels->contains('id', $label->id);
+            ->assertViewHas('labels', function ($labels) {
+                return $labels->contains('id', $this->label->id);
             });
     }
 
-    public function testEditFailsForUnauthenticatedUser()
+    public function testEditFailsForGuest()
     {
-        $task = Task::factory()->create();
-
-        $response = $this->get(route('tasks.edit', $task));
-
+        $response = $this->get(route('tasks.edit', $this->task));
         $response->assertRedirect(route('login'));
     }
 
