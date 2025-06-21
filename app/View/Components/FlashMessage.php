@@ -10,7 +10,7 @@ class FlashMessage extends Component
 {
     public function __construct()
     {
-        //
+        // you may add some logic here when it need's
     }
 
     public function render(): View|Closure|string

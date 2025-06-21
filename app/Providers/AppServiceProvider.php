@@ -9,7 +9,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        // you may add some logic here when it need's
     }
 
     public function boot(UrlGenerator $url): void
