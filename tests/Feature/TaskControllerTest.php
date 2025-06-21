@@ -162,6 +162,42 @@ class TaskControllerTest extends TestCase
         ]);
     }
 
+    public function testEditDisplaysFormForAuthenticatedUser()
+    {
+        // 1. Подготовка данных
+        $user = User::factory()->create();
+        $task = Task::factory()->create(['created_by_id' => $user->id]);
+        $status = TaskStatus::factory()->create();
+        $label = Label::factory()->create();
+
+        // 2. Выполнение запроса от имени авторизованного пользователя
+        $response = $this->actingAs($user)
+            ->get(route('tasks.edit', $task));
+
+        // 3. Проверки
+        $response->assertOk()
+            ->assertViewIs('tasks.edit')
+            ->assertViewHas('task', $task)
+            ->assertViewHas('statuses', function($statuses) use ($status) {
+                return $statuses->contains('id', $status->id);
+            })
+            ->assertViewHas('users', function($users) use ($user) {
+                return $users->contains('id', $user->id);
+            })
+            ->assertViewHas('labels', function($labels) use ($label) {
+                return $labels->contains('id', $label->id);
+            });
+    }
+
+    public function testEditFailsForUnauthenticatedUser()
+    {
+        $task = Task::factory()->create();
+
+        $response = $this->get(route('tasks.edit', $task));
+
+        $response->assertRedirect(route('login'));
+    }
+
     public function testAuthenticatedUserCanUpdateTask()
     {
         $updatedData = [
